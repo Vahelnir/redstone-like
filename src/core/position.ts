@@ -17,6 +17,10 @@ export class Position {
     return new Position(this.x, this.y, this.z);
   }
 
+  translate(dx: number, dy: number, dz: number): Position {
+    return new Position(this.x + dx, this.y + dy, this.z + dz);
+  }
+
   static fromStringKey(key: string): Position {
     const [x, y, z] = key.split(",").map(Number);
     return new Position(x, y, z);

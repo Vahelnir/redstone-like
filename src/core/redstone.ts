@@ -1,4 +1,4 @@
-import type { Position } from "./Position";
+import type { Position } from "./position";
 
 export type RedstoneDirections = {
   north: boolean;

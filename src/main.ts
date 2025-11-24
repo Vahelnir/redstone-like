@@ -12,8 +12,9 @@ import { createCube } from "./create-cube";
 import { createRedstone } from "./create-redstone";
 
 import { Redstone } from "./core/redstone";
-import { Position } from "./core/Position";
-import { computeRedstoneLinks } from "./core/compute-redstone-links";
+import { Position } from "./core/position";
+import { findRedstoneNetworks } from "./core/network/find-redstone-networks";
+import { computeRedstoneLinks as updateRedstoneLinks } from "./core/compute-redstone-links";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -41,19 +42,20 @@ const redstones = [
   { position: { x: 0, y: 0, z: 0 } },
   { position: { x: 1, y: 0, z: 0 } },
   { position: { x: 2, y: 1, z: 0 } },
-];
-
-const redstoneMap = new Map<string, Redstone>(
-  redstones.map((data) => {
-    const redstone = new Redstone(
+].map(
+  (data) =>
+    new Redstone(
       new Position(data.position.x, data.position.y, data.position.z)
-    );
-    return [redstone.position.toStringKey(), redstone];
-  })
+    )
 );
 
-computeRedstoneLinks(redstoneMap);
+const redstoneMap = new Map<string, Redstone>(
+  redstones.map((redstone) => [redstone.position.toStringKey(), redstone])
+);
+const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
+updateRedstoneLinks(redstoneNetworks);
 
+console.log(redstones);
 for (const redstone of redstoneMap.values()) {
   const redstoneMesh = createRedstone({
     directions: redstone.linkedDirections,
