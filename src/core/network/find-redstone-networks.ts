@@ -3,6 +3,7 @@ import { NetworkFinder } from "./network-finder";
 import { RedstoneNetwork } from "./redstone-network";
 
 export function findRedstoneNetworks(redstones: RedstoneElement[]) {
+  console.time("findRedstoneNetworks");
   const finder = new NetworkFinder(redstones);
   const networks: RedstoneNetwork[] = [];
   while (finder.hasMore()) {
@@ -12,5 +13,6 @@ export function findRedstoneNetworks(redstones: RedstoneElement[]) {
     }
   }
   console.log(networks);
+  console.timeEnd("findRedstoneNetworks");
   return networks;
 }

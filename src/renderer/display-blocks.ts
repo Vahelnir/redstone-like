@@ -6,6 +6,8 @@ import { createCube } from "./create-cube";
 import { createRedstoneCable } from "./create-redstone-cable";
 import { createRedstoneSource } from "./create-redstone-source";
 import type { RedstoneNetwork } from "../core/network/redstone-network";
+import { createRedstoneActivable } from "./create-redstone-activable";
+import { RedstoneActivable } from "../core/redstone-activable";
 
 export function displayBlocks(
   scene: Scene,
@@ -64,6 +66,12 @@ export function displayBlocks(
         position: position,
       });
       scene.add(source);
+    } else if (redstone instanceof RedstoneActivable) {
+      const activable = createRedstoneActivable({
+        position: position,
+        enabled: networkNode.power > 0,
+      });
+      scene.add(activable);
     }
 
     const blockPosition = redstone.position.clone();

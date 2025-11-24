@@ -49,6 +49,10 @@ export class RedstoneNetwork {
       );
       while (elements.length > 0 && elements[0].power > 0) {
         const currentElement = elements.shift()!;
+        if (!(currentElement.redstoneElement instanceof RedstoneCable)) {
+          continue;
+        }
+
         for (const neighbor of currentElement.neighbors) {
           if (!neighbor || neighbor.power >= currentElement.power - 1) {
             continue;

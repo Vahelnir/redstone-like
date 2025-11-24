@@ -13,6 +13,7 @@ import { findRedstoneNetworks } from "./core/network/find-redstone-networks";
 import { RedstoneElement } from "./core/redstone-element";
 import { RedstoneSource } from "./core/redstone-source";
 import { displayBlocks } from "./renderer/display-blocks";
+import { RedstoneActivable } from "./core/redstone-activable";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -56,6 +57,8 @@ const redstones: RedstoneElement[] = [
   new RedstoneCable(new Position(1, 0, 0)),
   new RedstoneCable(new Position(1, 1, 1)),
   new RedstoneCable(new Position(2, 1, 0)),
+  new RedstoneActivable(new Position(3, 1, 0)),
+  new RedstoneActivable(new Position(4, 1, 0)),
 
   new RedstoneCable(new Position(5, 0, 5)),
   new RedstoneCable(new Position(4, 1, 5)),
