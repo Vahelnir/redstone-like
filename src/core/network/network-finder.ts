@@ -1,6 +1,6 @@
 import { Position } from "../position";
 import type { RedstoneElement } from "../redstone-element";
-import { RedstoneNetwork } from "./redstone-network";
+import { POSSIBLE_NEIGHBORS, RedstoneNetwork } from "./redstone-network";
 
 export class NetworkFinder {
   #visited = new Set<string>();
@@ -30,26 +30,11 @@ export class NetworkFinder {
     network.addNode(startNode);
     this.#visited.add(startNode.position.toStringKey());
 
-    const possibleNeighbors = [
-      { dx: 0, dz: -1, dy: 0 },
-      { dx: 0, dz: 1, dy: 0 },
-      { dx: 1, dz: 0, dy: 0 },
-      { dx: -1, dz: 0, dy: 0 },
-      { dx: 0, dz: -1, dy: 1 },
-      { dx: 0, dz: 1, dy: 1 },
-      { dx: 1, dz: 0, dy: 1 },
-      { dx: -1, dz: 0, dy: 1 },
-      { dx: 0, dz: -1, dy: -1 },
-      { dx: 0, dz: 1, dy: -1 },
-      { dx: 1, dz: 0, dy: -1 },
-      { dx: -1, dz: 0, dy: -1 },
-    ];
-
     const nodesToExplore: RedstoneElement[] = [startNode];
     while (nodesToExplore.length > 0) {
       const currentNode = nodesToExplore.shift()!;
       console.log("explore", currentNode.position.toStringKey());
-      for (const neighbor of possibleNeighbors) {
+      for (const neighbor of POSSIBLE_NEIGHBORS) {
         const neighborPos = new Position(
           currentNode.position.x + neighbor.dx,
           currentNode.position.y + neighbor.dy,

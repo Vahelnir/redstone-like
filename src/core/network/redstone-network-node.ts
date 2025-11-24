@@ -1,5 +1,5 @@
 import type { RedstoneElement } from "../redstone-element";
-import type { RedstoneNetwork } from "./redstone-network";
+import { POSSIBLE_NEIGHBORS, type RedstoneNetwork } from "./redstone-network";
 
 export class RedstoneNetworkNode {
   network: RedstoneNetwork;
@@ -13,27 +13,12 @@ export class RedstoneNetworkNode {
   }
 
   get neighbors(): RedstoneNetworkNode[] {
-    return [
-      { x: 0, y: 0, z: -1 },
-      { x: 0, y: 0, z: 1 },
-      { x: 1, y: 0, z: 0 },
-      { x: -1, y: 0, z: 0 },
-      { x: 0, y: 1, z: -1 },
-      { x: 0, y: 1, z: 1 },
-      { x: 1, y: 1, z: 0 },
-      { x: -1, y: 1, z: 0 },
-      { x: 0, y: -1, z: -1 },
-      { x: 0, y: -1, z: 1 },
-      { x: 1, y: -1, z: 0 },
-      { x: -1, y: -1, z: 0 },
-    ]
-      .map((offset) =>
-        this.network.getNodeAt(
-          this.redstoneElement.position
-            .clone()
-            .translate(offset.x, offset.y, offset.z),
-        ),
-      )
-      .filter((node) => node !== null);
+    return POSSIBLE_NEIGHBORS.map((offset) =>
+      this.network.getNodeAt(
+        this.redstoneElement.position
+          .clone()
+          .translate(offset.dx, offset.dy, offset.dz),
+      ),
+    ).filter((node) => node !== null);
   }
 }

@@ -4,6 +4,14 @@ import type { RedstoneElement } from "../redstone-element";
 import { RedstoneSource } from "../redstone-source";
 import { RedstoneNetworkNode } from "./redstone-network-node";
 
+const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
+export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
+  { dx: 0, dz: -1, dy },
+  { dx: 0, dz: 1, dy },
+  { dx: 1, dz: 0, dy },
+  { dx: -1, dz: 0, dy },
+]);
+
 export class RedstoneNetwork {
   #nodes: RedstoneNetworkNode[];
   #nodeMap: Map<string, RedstoneNetworkNode>;
