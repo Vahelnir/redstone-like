@@ -33,7 +33,6 @@ export class NetworkFinder {
     const nodesToExplore: RedstoneElement[] = [startNode];
     while (nodesToExplore.length > 0) {
       const currentNode = nodesToExplore.shift()!;
-      console.log("explore", currentNode.position.toStringKey());
       for (const neighbor of POSSIBLE_NEIGHBORS) {
         const neighborPos = new Position(
           currentNode.position.x + neighbor.dx,
@@ -50,7 +49,6 @@ export class NetworkFinder {
           continue;
         }
 
-        console.log("  neighbor", neighborKey);
         if (this.#visited.has(neighborKey)) {
           throw new Error(
             "the redstone in " +

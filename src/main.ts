@@ -28,7 +28,7 @@ const camera = new PerspectiveCamera(
   80,
   rendererSize.width / rendererSize.height,
   0.1,
-  1000
+  1000,
 );
 
 camera.position.z = 5;
@@ -68,24 +68,32 @@ const redstones: RedstoneElement[] = [
 ];
 
 const redstoneMap = new Map<string, RedstoneElement>(
-  redstones.map((redstone) => [redstone.position.toStringKey(), redstone])
+  redstones.map((redstone) => [redstone.position.toStringKey(), redstone]),
 );
 const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
 
 console.log(redstones);
 
-redstoneNetworks.forEach((network) => network.tick());
-
-displayBlocks(scene, redstoneNetworks, redstoneMap);
+// Tick réseaux à 20Hz
+let lastTick = performance.now();
+const TICKS_PER_SECOND = 0.1;
+const TICK_INTERVAL = 1000 / TICKS_PER_SECOND; // 50ms
 
 function loop(t = 0) {
-  // console.time("ticking networks");
-  // redstoneNetworks.forEach((network) => network.tick());
-  // console.timeEnd("ticking networks");
+  // Tick réseaux à 20Hz
+  const now = performance.now();
+  if (now - lastTick >= TICK_INTERVAL || t === 0) {
+    for (const network of redstoneNetworks) {
+      network.tick();
+
+      // TODO: ne pas re-créer les meshes à chaque tick mais plutot juste update à chaque tick
+      displayBlocks(scene, redstoneNetworks, redstoneMap);
+    }
+    lastTick = now;
+  }
 
   controls.update();
   renderer.render(scene, camera);
-
   requestAnimationFrame(loop);
 }
 

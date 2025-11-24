@@ -59,12 +59,6 @@ export class RedstoneNetwork {
           }
 
           neighbor.power = currentElement.power - 1;
-          console.log(
-            " propagate to ",
-            neighbor.redstoneElement.position.toStringKey(),
-            " with power ",
-            neighbor.power,
-          );
           elements.push(neighbor);
         }
       }
