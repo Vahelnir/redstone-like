@@ -1,8 +1,8 @@
-import type { Redstone } from "../redstone";
+import type { RedstoneElement } from "../redstone-element";
 import { NetworkFinder } from "./network-finder";
 import { RedstoneNetwork } from "./redstone-network";
 
-export function findRedstoneNetworks(redstones: Redstone[]) {
+export function findRedstoneNetworks(redstones: RedstoneElement[]) {
   const finder = new NetworkFinder(redstones);
   const networks: RedstoneNetwork[] = [];
   while (finder.hasMore()) {

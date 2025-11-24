@@ -8,13 +8,16 @@ import {
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-import { createCube } from "./create-cube";
-import { createRedstone } from "./create-redstone";
+import { createCube } from "./renderer/create-cube";
+import { createRedstoneCable } from "./renderer/create-redstone-cable";
 
-import { Redstone } from "./core/redstone";
+import { RedstoneCable } from "./core/redstone-cable";
 import { Position } from "./core/position";
 import { findRedstoneNetworks } from "./core/network/find-redstone-networks";
 import { computeRedstoneLinks as updateRedstoneLinks } from "./core/compute-redstone-links";
+import { RedstoneElement } from "./core/redstone-element";
+import { RedstoneSource } from "./core/redstone-source";
+import { createRedstoneSource } from "./renderer/create-redstone-source";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -36,20 +39,16 @@ camera.position.z = 5;
 
 const scene = new Scene();
 
-const redstones = [
-  { position: { x: -1, y: 0, z: 0 } },
-  { position: { x: -1, y: 0, z: -1 } },
-  { position: { x: 0, y: 0, z: 0 } },
-  { position: { x: 1, y: 0, z: 0 } },
-  { position: { x: 2, y: 1, z: 0 } },
-].map(
-  (data) =>
-    new Redstone(
-      new Position(data.position.x, data.position.y, data.position.z)
-    )
-);
+const redstones: RedstoneElement[] = [
+  new RedstoneSource(new Position(-2, 0, 0)),
+  new RedstoneCable(new Position(-1, 0, 0)),
+  new RedstoneCable(new Position(-1, 0, -1)),
+  new RedstoneCable(new Position(0, 0, 0)),
+  new RedstoneCable(new Position(1, 0, 0)),
+  new RedstoneCable(new Position(2, 1, 0)),
+];
 
-const redstoneMap = new Map<string, Redstone>(
+const redstoneMap = new Map<string, RedstoneElement>(
   redstones.map((redstone) => [redstone.position.toStringKey(), redstone])
 );
 const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
@@ -57,14 +56,23 @@ updateRedstoneLinks(redstoneNetworks);
 
 console.log(redstones);
 for (const redstone of redstoneMap.values()) {
-  const redstoneMesh = createRedstone({
-    directions: redstone.linkedDirections,
-    position: new Vector3(
-      redstone.position.x,
-      redstone.position.y,
-      redstone.position.z
-    ),
-  });
+  const position = new Vector3(
+    redstone.position.x,
+    redstone.position.y,
+    redstone.position.z
+  );
+  if (redstone instanceof RedstoneCable) {
+    const redstoneMesh = createRedstoneCable({
+      directions: redstone.directions,
+      position: position,
+    });
+    scene.add(redstoneMesh);
+  } else if (redstone instanceof RedstoneSource) {
+    const source = createRedstoneSource({
+      position: position,
+    });
+    scene.add(source);
+  }
 
   const blockPosition = redstone.position.clone();
   blockPosition.y -= 1;
@@ -78,7 +86,6 @@ for (const redstone of redstoneMap.values()) {
       redstone.position.z
     ),
   });
-  scene.add(redstoneMesh);
   scene.add(groundCube);
 }
 

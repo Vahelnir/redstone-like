@@ -1,15 +1,15 @@
 import type { Position } from "./position";
+import { RedstoneElement } from "./redstone-element";
 
-export type RedstoneDirections = {
+export type RedstoneCableDirections = {
   north: boolean;
   south: boolean;
   east: boolean;
   west: boolean;
 };
 
-export class Redstone {
-  position: Position;
-  linkedDirections: RedstoneDirections = {
+export class RedstoneCable extends RedstoneElement {
+  directions: RedstoneCableDirections = {
     north: false,
     south: false,
     east: false,
@@ -17,6 +17,6 @@ export class Redstone {
   };
 
   constructor(position: Position) {
-    this.position = position;
+    super(position);
   }
 }

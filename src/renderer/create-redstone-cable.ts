@@ -1,4 +1,4 @@
-import { BoxGeometry, Group, Mesh, MeshStandardMaterial, Vector3 } from "three";
+import { BoxGeometry, Mesh, MeshStandardMaterial, Vector3 } from "three";
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 
 type Directions = {
@@ -8,7 +8,7 @@ type Directions = {
   west?: boolean;
 };
 
-export function createRedstone({
+export function createRedstoneCable({
   directions,
   position,
 }: {

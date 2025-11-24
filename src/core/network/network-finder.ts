@@ -1,15 +1,15 @@
 import { Position } from "../position";
-import type { Redstone } from "../redstone";
+import type { RedstoneElement } from "../redstone-element";
 import { RedstoneNetwork } from "./redstone-network";
 
 export class NetworkFinder {
   #visited = new Set<string>();
   #nodesToVisit = new Set<string>();
-  #nodeMap: Map<string, Redstone>;
+  #nodeMap: Map<string, RedstoneElement>;
 
-  constructor(redstones: Redstone[]) {
+  constructor(redstones: RedstoneElement[]) {
     this.#nodesToVisit = new Set<string>();
-    this.#nodeMap = new Map<string, Redstone>();
+    this.#nodeMap = new Map<string, RedstoneElement>();
     for (const redstone of redstones) {
       this.#nodeMap.set(redstone.position.toStringKey(), redstone);
       this.#nodesToVisit.add(redstone.position.toStringKey());
@@ -37,7 +37,7 @@ export class NetworkFinder {
       { dx: -1, dz: 0 },
     ];
 
-    const nodesToExplore: Redstone[] = [startNode];
+    const nodesToExplore: RedstoneElement[] = [startNode];
     while (nodesToExplore.length > 0) {
       const currentNode = nodesToExplore.shift()!;
       console.log("explore", currentNode.position.toStringKey());

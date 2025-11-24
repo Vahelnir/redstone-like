@@ -19,7 +19,7 @@ export function createCube({ position }: { position?: Vector3 }) {
     wireframe: true,
   });
   const wireMesh = new Mesh(geometry, wireMeshMaterial);
-  wireMesh.scale.setScalar(1.001);
+  wireMesh.scale.setScalar(1.005);
   cube.add(wireMesh);
 
   return cube;

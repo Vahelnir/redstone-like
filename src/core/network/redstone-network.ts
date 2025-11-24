@@ -1,5 +1,6 @@
 import type { Position } from "../position";
-import type { Redstone } from "../redstone";
+import type { RedstoneElement } from "../redstone-element";
+import { RedstoneNetworkNode } from "./redstone-network-node";
 
 export class RedstoneNetwork {
   #nodes: RedstoneNetworkNode[];
@@ -14,7 +15,7 @@ export class RedstoneNetwork {
     return this.#nodes;
   }
 
-  addNode(redstone: Redstone) {
+  addNode(redstone: RedstoneElement) {
     if (this.hasNode(redstone)) {
       return;
     }
@@ -24,38 +25,11 @@ export class RedstoneNetwork {
     this.#nodeMap.set(redstone.position.toStringKey(), node);
   }
 
-  hasNode(redstone: Redstone): boolean {
+  hasNode(redstone: RedstoneElement): boolean {
     return this.#nodeMap.has(redstone.position.toStringKey());
   }
 
   hasNodeAt(position: Position): boolean {
     return this.#nodeMap.has(position.toStringKey());
-  }
-}
-
-export class RedstoneNetworkNode {
-  network: RedstoneNetwork;
-  redstone: Redstone;
-
-  constructor(network: RedstoneNetwork, redstone: Redstone) {
-    this.network = network;
-    this.redstone = redstone;
-  }
-
-  get neighbors() {
-    return {
-      north: this.network.hasNodeAt(
-        this.redstone.position.clone().translate(0, 0, -1),
-      ),
-      south: this.network.hasNodeAt(
-        this.redstone.position.clone().translate(0, 0, 1),
-      ),
-      east: this.network.hasNodeAt(
-        this.redstone.position.clone().translate(1, 0, 0),
-      ),
-      west: this.network.hasNodeAt(
-        this.redstone.position.clone().translate(-1, 0, 0),
-      ),
-    };
   }
 }
