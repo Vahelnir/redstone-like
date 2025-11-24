@@ -14,13 +14,5 @@ export function createCube({ position }: { position?: Vector3 }) {
     cube.position.copy(position);
   }
 
-  const wireMeshMaterial = new MeshBasicMaterial({
-    color: 0x000000,
-    wireframe: true,
-  });
-  const wireMesh = new Mesh(geometry, wireMeshMaterial);
-  wireMesh.scale.setScalar(1.005);
-  cube.add(wireMesh);
-
   return cube;
 }
