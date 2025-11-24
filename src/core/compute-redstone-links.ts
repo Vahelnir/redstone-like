@@ -8,16 +8,16 @@ export function computeRedstoneLinks(networks: RedstoneNetwork[]) {
         continue;
       }
 
-      if (node.neighbors.north) {
+      if (node.neighborsCardinals.north) {
         node.redstoneElement.directions.north = true;
       }
-      if (node.neighbors.south) {
+      if (node.neighborsCardinals.south) {
         node.redstoneElement.directions.south = true;
       }
-      if (node.neighbors.east) {
+      if (node.neighborsCardinals.east) {
         node.redstoneElement.directions.east = true;
       }
-      if (node.neighbors.west) {
+      if (node.neighborsCardinals.west) {
         node.redstoneElement.directions.west = true;
       }
     }
