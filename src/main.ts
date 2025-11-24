@@ -10,7 +10,6 @@ import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 import { RedstoneCable } from "./core/redstone-cable";
 import { Position } from "./core/position";
 import { findRedstoneNetworks } from "./core/network/find-redstone-networks";
-import { computeRedstoneLinks as updateRedstoneLinks } from "./core/compute-redstone-links";
 import { RedstoneElement } from "./core/redstone-element";
 import { RedstoneSource } from "./core/redstone-source";
 import { displayBlocks } from "./renderer/display-blocks";
@@ -55,25 +54,35 @@ const redstones: RedstoneElement[] = [
   new RedstoneSource(new Position(5, 0, -2)),
   new RedstoneCable(new Position(0, 0, 0)),
   new RedstoneCable(new Position(1, 0, 0)),
+  new RedstoneCable(new Position(1, 1, 1)),
   new RedstoneCable(new Position(2, 1, 0)),
+
+  new RedstoneCable(new Position(5, 0, 5)),
+  new RedstoneCable(new Position(4, 1, 5)),
+  new RedstoneCable(new Position(5, 1, 4)),
+  new RedstoneCable(new Position(5, 1, 6)),
+  new RedstoneCable(new Position(6, 1, 5)),
 ];
 
 const redstoneMap = new Map<string, RedstoneElement>(
   redstones.map((redstone) => [redstone.position.toStringKey(), redstone])
 );
 const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
-updateRedstoneLinks(redstoneNetworks);
 
 console.log(redstones);
 
-console.log("ticking networks");
 redstoneNetworks.forEach((network) => network.tick());
 
 displayBlocks(scene, redstoneNetworks, redstoneMap);
 
 function loop(t = 0) {
+  // console.time("ticking networks");
+  // redstoneNetworks.forEach((network) => network.tick());
+  // console.timeEnd("ticking networks");
+
   controls.update();
   renderer.render(scene, camera);
+
   requestAnimationFrame(loop);
 }
 

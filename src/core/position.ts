@@ -21,6 +21,10 @@ export class Position {
     return new Position(this.x + dx, this.y + dy, this.z + dz);
   }
 
+  difference(other: Position): Position {
+    return new Position(other.x - this.x, other.y - this.y, other.z - this.z);
+  }
+
   static fromStringKey(key: string): Position {
     const [x, y, z] = key.split(",").map(Number);
     return new Position(x, y, z);

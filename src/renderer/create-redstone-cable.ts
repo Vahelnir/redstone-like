@@ -10,10 +10,10 @@ import {
 import { mergeGeometries } from "three/addons/utils/BufferGeometryUtils.js";
 
 type Directions = {
-  north?: boolean;
-  south?: boolean;
-  east?: boolean;
-  west?: boolean;
+  north?: boolean | "up";
+  south?: boolean | "up";
+  east?: boolean | "up";
+  west?: boolean | "up";
 };
 
 const REDSTONE_CABLE_COLORS = [
@@ -43,34 +43,55 @@ export function createRedstoneCable({
 
 function getRedstoneMesh(directions: Directions) {
   const geometries = [];
-  const offsetY = -0.45;
+  const height = 0.01;
+  const centerOffset = -(1 - 0.02) / 2;
 
-  const centerGeom = new BoxGeometry(0.3, 0.1, 0.3);
-  centerGeom.translate(0, offsetY, 0);
+  const centerGeom = new BoxGeometry(0.3, height, 0.3);
+  centerGeom.translate(0, centerOffset, 0);
   geometries.push(centerGeom);
 
   if (directions.north) {
-    const geom = new BoxGeometry(0.1, 0.1, 0.4);
-    geom.translate(0, offsetY, -0.3);
+    const geom = new BoxGeometry(0.1, height, 0.4);
+    geom.translate(0, centerOffset, -0.3);
     geometries.push(geom);
+    if (directions.north === "up") {
+      const upGeom = new BoxGeometry(0.1, 1, height);
+      upGeom.translate(0, 0, centerOffset);
+      geometries.push(upGeom);
+    }
   }
 
   if (directions.south) {
-    const geom = new BoxGeometry(0.1, 0.1, 0.4);
-    geom.translate(0, offsetY, 0.3);
+    const geom = new BoxGeometry(0.1, height, 0.4);
+    geom.translate(0, centerOffset, 0.3);
     geometries.push(geom);
+    if (directions.south === "up") {
+      const upGeom = new BoxGeometry(0.1, 1, height);
+      upGeom.translate(0, 0, -centerOffset);
+      geometries.push(upGeom);
+    }
   }
 
   if (directions.east) {
-    const geom = new BoxGeometry(0.4, 0.1, 0.1);
-    geom.translate(0.3, offsetY, 0);
+    const geom = new BoxGeometry(0.4, height, 0.1);
+    geom.translate(0.3, centerOffset, 0);
     geometries.push(geom);
+    if (directions.east === "up") {
+      const upGeom = new BoxGeometry(height, 1, 0.1);
+      upGeom.translate(-centerOffset, 0, 0);
+      geometries.push(upGeom);
+    }
   }
 
   if (directions.west) {
-    const geom = new BoxGeometry(0.4, 0.1, 0.1);
-    geom.translate(-0.3, offsetY, 0);
+    const geom = new BoxGeometry(0.4, height, 0.1);
+    geom.translate(-0.3, centerOffset, 0);
     geometries.push(geom);
+    if (directions.west === "up") {
+      const upGeom = new BoxGeometry(height, 1, 0.1);
+      upGeom.translate(centerOffset, 0, 0);
+      geometries.push(upGeom);
+    }
   }
 
   const merged = mergeGeometries(geometries);

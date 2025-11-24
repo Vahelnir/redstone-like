@@ -29,8 +29,32 @@ export function displayBlocks(
     }
 
     if (redstone instanceof RedstoneCable) {
+      const directions = networkNode.neighbors.reduce<{
+        north: boolean | "up";
+        south: boolean | "up";
+        east: boolean | "up";
+        west: boolean | "up";
+      }>(
+        (acc, neighbor) => {
+          const diff = redstone.position.difference(
+            neighbor.redstoneElement.position,
+          );
+          const isUp = diff.y === 1;
+          if (diff.x === 0 && diff.z === -1) {
+            acc.north = isUp ? "up" : true;
+          } else if (diff.x === 0 && diff.z === 1) {
+            acc.south = isUp ? "up" : true;
+          } else if (diff.x === 1 && diff.z === 0) {
+            acc.east = isUp ? "up" : true;
+          } else if (diff.x === -1 && diff.z === 0) {
+            acc.west = isUp ? "up" : true;
+          }
+          return acc;
+        },
+        { north: false, south: false, east: false, west: false },
+      );
       const redstoneMesh = createRedstoneCable({
-        directions: redstone.directions,
+        directions,
         position: position,
         power: networkNode.power,
       });

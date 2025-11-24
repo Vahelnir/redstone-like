@@ -14,35 +14,26 @@ export class RedstoneNetworkNode {
 
   get neighbors(): RedstoneNetworkNode[] {
     return [
-      this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(0, 0, -1),
-      ),
-      this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(0, 0, 1),
-      ),
-      this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(1, 0, 0),
-      ),
-      this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(-1, 0, 0),
-      ),
-    ].filter((node) => node !== null);
-  }
-
-  get neighborsCardinals() {
-    return {
-      north: this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(0, 0, -1),
-      ),
-      south: this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(0, 0, 1),
-      ),
-      east: this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(1, 0, 0),
-      ),
-      west: this.network.getNodeAt(
-        this.redstoneElement.position.clone().translate(-1, 0, 0),
-      ),
-    };
+      { x: 0, y: 0, z: -1 },
+      { x: 0, y: 0, z: 1 },
+      { x: 1, y: 0, z: 0 },
+      { x: -1, y: 0, z: 0 },
+      { x: 0, y: 1, z: -1 },
+      { x: 0, y: 1, z: 1 },
+      { x: 1, y: 1, z: 0 },
+      { x: -1, y: 1, z: 0 },
+      { x: 0, y: -1, z: -1 },
+      { x: 0, y: -1, z: 1 },
+      { x: 1, y: -1, z: 0 },
+      { x: -1, y: -1, z: 0 },
+    ]
+      .map((offset) =>
+        this.network.getNodeAt(
+          this.redstoneElement.position
+            .clone()
+            .translate(offset.x, offset.y, offset.z),
+        ),
+      )
+      .filter((node) => node !== null);
   }
 }

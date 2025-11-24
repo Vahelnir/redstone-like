@@ -31,10 +31,18 @@ export class NetworkFinder {
     this.#visited.add(startNode.position.toStringKey());
 
     const possibleNeighbors = [
-      { dx: 0, dz: -1 },
-      { dx: 0, dz: 1 },
-      { dx: 1, dz: 0 },
-      { dx: -1, dz: 0 },
+      { dx: 0, dz: -1, dy: 0 },
+      { dx: 0, dz: 1, dy: 0 },
+      { dx: 1, dz: 0, dy: 0 },
+      { dx: -1, dz: 0, dy: 0 },
+      { dx: 0, dz: -1, dy: 1 },
+      { dx: 0, dz: 1, dy: 1 },
+      { dx: 1, dz: 0, dy: 1 },
+      { dx: -1, dz: 0, dy: 1 },
+      { dx: 0, dz: -1, dy: -1 },
+      { dx: 0, dz: 1, dy: -1 },
+      { dx: 1, dz: 0, dy: -1 },
+      { dx: -1, dz: 0, dy: -1 },
     ];
 
     const nodesToExplore: RedstoneElement[] = [startNode];
@@ -44,7 +52,7 @@ export class NetworkFinder {
       for (const neighbor of possibleNeighbors) {
         const neighborPos = new Position(
           currentNode.position.x + neighbor.dx,
-          currentNode.position.y,
+          currentNode.position.y + neighbor.dy,
           currentNode.position.z + neighbor.dz,
         );
         const neighborKey = neighborPos.toStringKey();
