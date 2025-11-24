@@ -7,8 +7,10 @@ import {
   HemisphereLight,
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
+
 import { createCube } from "./create-cube";
 import { createRedstone } from "./create-redstone";
+
 import { Redstone } from "./core/redstone";
 import { Position } from "./core/Position";
 import { computeRedstoneLinks } from "./core/compute-redstone-links";
@@ -34,6 +36,8 @@ camera.position.z = 5;
 const scene = new Scene();
 
 const redstones = [
+  { position: { x: -1, y: 0, z: 0 } },
+  { position: { x: -1, y: 0, z: -1 } },
   { position: { x: 0, y: 0, z: 0 } },
   { position: { x: 1, y: 0, z: 0 } },
   { position: { x: 2, y: 1, z: 0 } },
@@ -59,6 +63,12 @@ for (const redstone of redstoneMap.values()) {
       redstone.position.z
     ),
   });
+
+  const blockPosition = redstone.position.clone();
+  blockPosition.y -= 1;
+  if (redstoneMap.get(blockPosition.toStringKey()) === redstone) {
+    throw new Error("position clash");
+  }
   const groundCube = createCube({
     position: new Vector3(
       redstone.position.x,

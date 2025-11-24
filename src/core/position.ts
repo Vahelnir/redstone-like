@@ -13,6 +13,10 @@ export class Position {
     return `${this.x},${this.y},${this.z}`;
   }
 
+  clone() {
+    return new Position(this.x, this.y, this.z);
+  }
+
   static fromStringKey(key: string): Position {
     const [x, y, z] = key.split(",").map(Number);
     return new Position(x, y, z);
