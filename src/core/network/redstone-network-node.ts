@@ -5,8 +5,6 @@ export class RedstoneNetworkNode {
   network: RedstoneNetwork;
   redstoneElement: RedstoneElement;
 
-  power: number = 0;
-
   constructor(network: RedstoneNetwork, redstone: RedstoneElement) {
     this.network = network;
     this.redstoneElement = redstone;

@@ -25,22 +25,15 @@ export function displayBlocks(
       throw new Error("redstone not in network");
     }
 
-    const networkNode = network.getNodeAt(redstone.position);
-    if (!networkNode) {
-      throw new Error("redstone network node not found");
-    }
-
     if (redstone instanceof RedstoneCable) {
-      const directions = networkNode.neighbors.reduce<{
+      const directions = network.getNeighborsOf(redstone).reduce<{
         north: boolean | "up";
         south: boolean | "up";
         east: boolean | "up";
         west: boolean | "up";
       }>(
         (acc, neighbor) => {
-          const diff = redstone.position.difference(
-            neighbor.redstoneElement.position,
-          );
+          const diff = redstone.position.difference(neighbor.position);
           const isUp = diff.y === 1;
           if (diff.x === 0 && diff.z === -1) {
             acc.north = isUp ? "up" : true;
@@ -58,7 +51,7 @@ export function displayBlocks(
       const redstoneMesh = createRedstoneCable({
         directions,
         position: position,
-        power: networkNode.power,
+        power: redstone.power,
       });
       scene.add(redstoneMesh);
     } else if (redstone instanceof RedstoneSource) {
@@ -69,7 +62,7 @@ export function displayBlocks(
     } else if (redstone instanceof RedstoneActivable) {
       const activable = createRedstoneActivable({
         position: position,
-        enabled: networkNode.power > 0,
+        enabled: redstone.power > 0,
       });
       scene.add(activable);
     }

@@ -1,8 +1,8 @@
 import type { Position } from "../position";
+import { RedstoneActivable } from "../redstone-activable";
 import { RedstoneCable } from "../redstone-cable";
 import type { RedstoneElement } from "../redstone-element";
 import { RedstoneSource } from "../redstone-source";
-import { RedstoneNetworkNode } from "./redstone-network-node";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
 export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
@@ -13,59 +13,67 @@ export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
 ]);
 
 export class RedstoneNetwork {
-  #nodes: RedstoneNetworkNode[];
-  #nodeMap: Map<string, RedstoneNetworkNode>;
+  #nodes: RedstoneElement[];
+  #nodeMap: Map<string, RedstoneElement>;
 
   constructor() {
     this.#nodes = [];
-    this.#nodeMap = new Map<string, RedstoneNetworkNode>();
+    this.#nodeMap = new Map<string, RedstoneElement>();
   }
 
   get nodes() {
     return this.#nodes;
   }
 
+  getNeighborsOf(redstoneElement: RedstoneElement): RedstoneElement[] {
+    return POSSIBLE_NEIGHBORS.map((offset) =>
+      this.getNodeAt(
+        redstoneElement.position
+          .clone()
+          .translate(offset.dx, offset.dy, offset.dz),
+      ),
+    ).filter((node) => node !== null);
+  }
+
   tick() {
-    for (const sourceNode of this.#nodes) {
-      const redstoneElement = sourceNode.redstoneElement;
-      if (!(redstoneElement instanceof RedstoneSource)) {
-        continue;
-      }
-
-      sourceNode.power = redstoneElement.power;
-
-      const elements = [...sourceNode.neighbors].filter(
-        (neighbor) => neighbor.redstoneElement instanceof RedstoneCable,
-      );
-      for (const element of elements) {
-        element.power = sourceNode.power - 1;
-      }
-
-      console.log(
-        "start propagation from ",
-        sourceNode.redstoneElement.position.toStringKey(),
-        " with power ",
-        sourceNode.power,
-      );
-      while (elements.length > 0 && elements[0].power > 0) {
-        const currentElement = elements.shift()!;
-        if (!(currentElement.redstoneElement instanceof RedstoneCable)) {
+    const sourceNodes = this.#nodes.filter(
+      (node) => node instanceof RedstoneSource,
+    );
+    for (const sourceNode of sourceNodes) {
+      const initialPower = sourceNode.power;
+      const visited = new Set<string>();
+      const queue: { node: RedstoneElement; power: number }[] = [
+        { node: sourceNode, power: initialPower },
+      ];
+      while (queue.length > 0) {
+        const { node, power } = queue.shift()!;
+        if (visited.has(node.position.toStringKey()) || power <= 0) {
           continue;
         }
 
-        for (const neighbor of currentElement.neighbors) {
-          if (!neighbor || neighbor.power >= currentElement.power - 1) {
-            continue;
-          }
+        visited.add(node.position.toStringKey());
 
-          neighbor.power = currentElement.power - 1;
-          elements.push(neighbor);
+        if (
+          node instanceof RedstoneActivable ||
+          node instanceof RedstoneCable
+        ) {
+          node.power = Math.max(node.power, power);
+        }
+
+        const neighbors = this.getNeighborsOf(node);
+        for (const neighbor of neighbors) {
+          if (
+            neighbor instanceof RedstoneActivable ||
+            neighbor instanceof RedstoneCable
+          ) {
+            queue.push({ node: neighbor, power: power - 1 });
+          }
         }
       }
     }
   }
 
-  getNodeAt(position: Position): RedstoneNetworkNode | null {
+  getNodeAt(position: Position): RedstoneElement | null {
     return this.#nodeMap.get(position.toStringKey()) || null;
   }
 
@@ -74,9 +82,8 @@ export class RedstoneNetwork {
       return;
     }
 
-    const node = new RedstoneNetworkNode(this, redstone);
-    this.#nodes.push(node);
-    this.#nodeMap.set(redstone.position.toStringKey(), node);
+    this.#nodes.push(redstone);
+    this.#nodeMap.set(redstone.position.toStringKey(), redstone);
   }
 
   hasNode(redstone: RedstoneElement): boolean {
