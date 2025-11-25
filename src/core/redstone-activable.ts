@@ -11,4 +11,6 @@ export class RedstoneActivable extends RedstoneElement {
   get isActive(): boolean {
     return this.power > 0;
   }
+
+  tick() {}
 }

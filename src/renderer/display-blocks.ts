@@ -8,6 +8,8 @@ import { createRedstoneSource } from "./create-redstone-source";
 import type { RedstoneNetwork } from "../core/network/redstone-network";
 import { createRedstoneActivable } from "./create-redstone-activable";
 import { RedstoneActivable } from "../core/redstone-activable";
+import { RedstoneRepeater } from "../core/redstone-repeater";
+import { createRedstoneRepeater } from "./create-redstone-repeater";
 
 export function displayBlocks(
   scene: Scene,
@@ -65,6 +67,13 @@ export function displayBlocks(
         enabled: redstone.power > 0,
       });
       scene.add(activable);
+    } else if (redstone instanceof RedstoneRepeater) {
+      const repeater = createRedstoneRepeater({
+        position: position,
+        enabled: redstone.isPowered,
+        direction: redstone.direction,
+      });
+      scene.add(repeater);
     }
 
     const blockPosition = redstone.position.clone();

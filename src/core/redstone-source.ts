@@ -7,4 +7,6 @@ export class RedstoneSource extends RedstoneElement {
   constructor(position: Position) {
     super(position);
   }
+
+  tick() {}
 }

@@ -7,4 +7,6 @@ export class RedstoneCable extends RedstoneElement {
   constructor(position: Position) {
     super(position);
   }
+
+  tick() {}
 }

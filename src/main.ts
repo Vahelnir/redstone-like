@@ -14,6 +14,7 @@ import { RedstoneElement } from "./core/redstone-element";
 import { RedstoneSource } from "./core/redstone-source";
 import { displayBlocks } from "./renderer/display-blocks";
 import { RedstoneActivable } from "./core/redstone-activable";
+import { RedstoneRepeater } from "./core/redstone-repeater";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -50,6 +51,8 @@ const redstones: RedstoneElement[] = [
   new RedstoneCable(new Position(0, 0, -2)),
   new RedstoneCable(new Position(1, 0, -2)),
   new RedstoneCable(new Position(2, 0, -2)),
+  new RedstoneRepeater(new Position(2, 0, -3), "north"),
+  new RedstoneCable(new Position(2, 0, -4)),
   new RedstoneCable(new Position(3, 0, -2)),
   new RedstoneCable(new Position(4, 0, -2)),
   new RedstoneSource(new Position(5, 0, -2)),

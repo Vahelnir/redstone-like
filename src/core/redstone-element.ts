@@ -6,4 +6,6 @@ export abstract class RedstoneElement {
   constructor(position: Position) {
     this.position = position;
   }
+
+  abstract tick(): void;
 }
