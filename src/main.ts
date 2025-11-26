@@ -76,6 +76,7 @@ const redstoneMap = new Map<string, RedstoneElement>(
 const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
 
 console.log(redstones);
+displayBlocks(scene, redstoneNetworks, redstoneMap);
 
 // Tick réseaux à 20Hz
 let lastTick = performance.now();
@@ -88,14 +89,12 @@ function loop(t = 0) {
   if (now - lastTick >= TICK_INTERVAL || t === 0) {
     for (const network of redstoneNetworks) {
       network.tick();
-
-      // TODO: ne pas re-créer les meshes à chaque tick mais plutot juste update à chaque tick
-      displayBlocks(scene, redstoneNetworks, redstoneMap);
     }
     lastTick = now;
   }
 
   controls.update();
+  redstones.forEach((r) => r.render());
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }

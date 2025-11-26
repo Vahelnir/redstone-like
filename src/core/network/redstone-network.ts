@@ -38,7 +38,7 @@ export class RedstoneNetwork {
 
   tick() {
     for (const node of this.#nodes) {
-      node.tick();
+      node.redstoneTick(this);
     }
 
     const sourceNodes = this.#nodes.filter(

@@ -1,3 +1,4 @@
+import type { RedstoneNetwork } from "./network/redstone-network";
 import type { Position } from "./position";
 
 export abstract class RedstoneElement {
@@ -7,5 +8,6 @@ export abstract class RedstoneElement {
     this.position = position;
   }
 
-  abstract tick(): void;
+  abstract render(): void;
+  abstract redstoneTick(network: RedstoneNetwork): void;
 }

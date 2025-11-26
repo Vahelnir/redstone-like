@@ -1,16 +1,34 @@
+import { BoxGeometry, Mesh, MeshStandardMaterial } from "three";
 import type { Position } from "./position";
 import { RedstoneElement } from "./redstone-element";
 
 export class RedstoneActivable extends RedstoneElement {
   power: number = 0;
 
+  mesh;
+
   constructor(position: Position) {
     super(position);
+
+    this.mesh = createRedstoneActivable();
+  }
+
+  render() {
+    this.mesh.position.copy(this.position);
+    this.mesh.material.color.setHex(this.isActive ? 0x00ff00 : 0x666666);
   }
 
   get isActive(): boolean {
     return this.power > 0;
   }
 
-  tick() {}
+  redstoneTick() {}
+}
+
+function createRedstoneActivable() {
+  const geometry = new BoxGeometry(1, 1, 1);
+  const material = new MeshStandardMaterial();
+  const cube = new Mesh(geometry, material);
+
+  return cube;
 }
