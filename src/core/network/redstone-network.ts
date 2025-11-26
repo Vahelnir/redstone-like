@@ -67,6 +67,11 @@ export class RedstoneNetwork {
           node.power = Math.max(node.power, power);
         }
 
+        // don't propagate power from activable blocks
+        if (node instanceof RedstoneActivable) {
+          continue;
+        }
+
         if (node instanceof RedstoneRepeater) {
           if (node.outputPower <= 0) {
             continue;
