@@ -14,8 +14,6 @@ export class RedstoneRepeater extends RedstoneElement {
   ticksBeforeActivating = 2;
   ticksLeft: number;
 
-  power = 0;
-
   direction: RepeaterDirection;
 
   mesh;
@@ -55,7 +53,37 @@ export class RedstoneRepeater extends RedstoneElement {
     }
   }
 
-  get targetPosition(): Position {
+  receivePowerFrom(source: RedstoneElement, power: number): void {
+    console.log(
+      "Repeater received power",
+      power,
+      "from",
+      source.position,
+      "and expected",
+      this.inputPosition,
+    );
+    if (source.position.equals(this.inputPosition)) {
+      this.power = Math.max(this.power, power);
+    }
+  }
+
+  get inputPosition(): Position {
+    if (this.direction === "north") {
+      return this.position.translate(0, 0, 1);
+    }
+
+    if (this.direction === "south") {
+      return this.position.translate(0, 0, -1);
+    }
+
+    if (this.direction === "east") {
+      return this.position.translate(-1, 0, 0);
+    }
+
+    return this.position.translate(1, 0, 0);
+  }
+
+  get outputPosition(): Position {
     if (this.direction === "north") {
       return this.position.translate(0, 0, -1);
     }

@@ -25,6 +25,10 @@ export class Position {
     return new Position(other.x - this.x, other.y - this.y, other.z - this.z);
   }
 
+  equals(other: Position): boolean {
+    return this.x === other.x && this.y === other.y && this.z === other.z;
+  }
+
   static fromStringKey(key: string): Position {
     const [x, y, z] = key.split(",").map(Number);
     return new Position(x, y, z);

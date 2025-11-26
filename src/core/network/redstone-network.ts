@@ -47,11 +47,13 @@ export class RedstoneNetwork {
     for (const sourceNode of sourceNodes) {
       const initialPower = sourceNode.power;
       const visited = new Set<string>();
-      const queue: { node: RedstoneElement; power: number }[] = [
-        { node: sourceNode, power: initialPower },
-      ];
+      const queue: {
+        node: RedstoneElement;
+        power: number;
+        from: RedstoneElement | null;
+      }[] = [{ node: sourceNode, power: initialPower, from: null }];
       while (queue.length > 0) {
-        const { node, power } = queue.shift()!;
+        const { node, power, from } = queue.shift()!;
         if (visited.has(node.position.toStringKey()) || power <= 0) {
           continue;
         }
@@ -59,12 +61,8 @@ export class RedstoneNetwork {
         visited.add(node.position.toStringKey());
 
         // if the node can be powered, power it
-        if (
-          node instanceof RedstoneActivable ||
-          node instanceof RedstoneCable ||
-          node instanceof RedstoneRepeater
-        ) {
-          node.power = Math.max(node.power, power);
+        if (from) {
+          node.receivePowerFrom(from, power);
         }
 
         // don't propagate power from activable blocks
@@ -78,9 +76,13 @@ export class RedstoneNetwork {
           }
           console.log("Repeater outputting power", node.outputPower);
 
-          const targetNode = this.getNodeAt(node.targetPosition);
+          const targetNode = this.getNodeAt(node.outputPosition);
           if (targetNode) {
-            queue.push({ node: targetNode, power: node.outputPower });
+            queue.push({
+              node: targetNode,
+              power: node.outputPower,
+              from: node,
+            });
           }
           continue;
         }
@@ -92,7 +94,7 @@ export class RedstoneNetwork {
             neighbor instanceof RedstoneCable ||
             neighbor instanceof RedstoneRepeater
           ) {
-            queue.push({ node: neighbor, power: power - 1 });
+            queue.push({ node: neighbor, power: power - 1, from: node });
           }
         }
       }

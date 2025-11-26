@@ -29,8 +29,6 @@ const REDSTONE_CABLE_COLORS = [
 const geometryCache = new Map<string, BufferGeometry>();
 
 export class RedstoneCable extends RedstoneElement {
-  power: number = 0;
-
   direction: Directions = {
     north: false,
     south: false,
