@@ -1,8 +1,6 @@
 import type { Position } from "../position";
 import { RedstoneActivable } from "../redstone-activable";
-import { RedstoneCable } from "../redstone-cable";
 import type { RedstoneElement } from "../redstone-element";
-import { RedstoneRepeater } from "../redstone-repeater";
 import { RedstoneSource } from "../redstone-source";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
@@ -39,6 +37,7 @@ export class RedstoneNetwork {
   tick() {
     for (const node of this.#nodes) {
       node.redstoneTick(this);
+      node.power = 0;
     }
 
     const sourceNodes = this.#nodes.filter(
@@ -50,52 +49,29 @@ export class RedstoneNetwork {
       const queue: {
         node: RedstoneElement;
         power: number;
-        from: RedstoneElement | null;
-      }[] = [{ node: sourceNode, power: initialPower, from: null }];
+      }[] = [{ node: sourceNode, power: initialPower }];
       while (queue.length > 0) {
-        const { node, power, from } = queue.shift()!;
-        if (visited.has(node.position.toStringKey()) || power <= 0) {
+        const { node, power } = queue.shift()!;
+        if (visited.has(node.position.toStringKey())) {
           continue;
         }
 
         visited.add(node.position.toStringKey());
 
-        // if the node can be powered, power it
-        if (from) {
-          node.receivePowerFrom(from, power);
-        }
-
+        // TODO: improve this logic to be more generic (all other blocks cannot propagate power)
         // don't propagate power from activable blocks
         if (node instanceof RedstoneActivable) {
           continue;
         }
 
-        if (node instanceof RedstoneRepeater) {
-          if (node.outputPower <= 0) {
-            continue;
-          }
-          console.log("Repeater outputting power", node.outputPower);
-
-          const targetNode = this.getNodeAt(node.outputPosition);
-          if (targetNode) {
-            queue.push({
-              node: targetNode,
-              power: node.outputPower,
-              from: node,
-            });
-          }
-          continue;
-        }
-
         const neighbors = this.getNeighborsOf(node);
         for (const neighbor of neighbors) {
-          if (
-            neighbor instanceof RedstoneActivable ||
-            neighbor instanceof RedstoneCable ||
-            neighbor instanceof RedstoneRepeater
-          ) {
-            queue.push({ node: neighbor, power: power - 1, from: node });
+          const sentPower = node.sendPowerTo(neighbor, power) ?? 0;
+          if (sentPower > 0) {
+            const accepted = neighbor.receivePowerFrom(node, sentPower);
           }
+
+          queue.push({ node: neighbor, power: sentPower });
         }
       }
     }

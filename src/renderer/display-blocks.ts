@@ -7,6 +7,7 @@ import { createRedstoneCable } from "./create-redstone-cable";
 import type { RedstoneNetwork } from "../core/network/redstone-network";
 import { RedstoneActivable } from "../core/redstone-activable";
 import { RedstoneRepeater } from "../core/redstone-repeater";
+import { RedstoneInvertor } from "../core/redstone-invertor";
 
 export function displayBlocks(
   scene: Scene,
@@ -14,23 +15,13 @@ export function displayBlocks(
   redstoneMap: Map<string, RedstoneElement>,
 ) {
   for (const redstone of redstoneMap.values()) {
-    const position = new Vector3(
-      redstone.position.x,
-      redstone.position.y,
-      redstone.position.z,
-    );
-    const network = networks.find((n) => n.hasNode(redstone));
-    if (!network) {
-      throw new Error("redstone not in network");
-    }
-
-    if (redstone instanceof RedstoneCable) {
-      scene.add(redstone.mesh);
-    } else if (redstone instanceof RedstoneSource) {
-      scene.add(redstone.mesh);
-    } else if (redstone instanceof RedstoneActivable) {
-      scene.add(redstone.mesh);
-    } else if (redstone instanceof RedstoneRepeater) {
+    if (
+      redstone instanceof RedstoneCable ||
+      redstone instanceof RedstoneSource ||
+      redstone instanceof RedstoneActivable ||
+      redstone instanceof RedstoneRepeater ||
+      redstone instanceof RedstoneInvertor
+    ) {
       scene.add(redstone.mesh);
     }
 

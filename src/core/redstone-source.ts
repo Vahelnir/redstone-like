@@ -3,8 +3,6 @@ import type { Position } from "./position";
 import { RedstoneElement } from "./redstone-element";
 
 export class RedstoneSource extends RedstoneElement {
-  power: number = 16;
-
   mesh;
 
   constructor(position: Position) {
@@ -17,7 +15,19 @@ export class RedstoneSource extends RedstoneElement {
     this.mesh.position.copy(this.position);
   }
 
+  receivePowerFrom(_source: RedstoneElement, _power: number): boolean {
+    return false;
+  }
+
+  sendPowerTo(_target: RedstoneElement, _power: number): number {
+    return this.outputPower;
+  }
+
   redstoneTick() {}
+
+  get outputPower(): number {
+    return 15;
+  }
 }
 
 function createRedstoneSource() {

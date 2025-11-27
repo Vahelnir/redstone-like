@@ -12,8 +12,12 @@ export abstract class RedstoneElement {
   abstract render(): void;
   abstract redstoneTick(network: RedstoneNetwork): void;
 
-  receivePowerFrom(source: RedstoneElement, power: number): void {
-    // Handle receiving power from another element
+  receivePowerFrom(_source: RedstoneElement, power: number): boolean {
     this.power = Math.max(this.power, power);
+    return true;
+  }
+
+  sendPowerTo(target: RedstoneElement, power: number): number {
+    return this.power;
   }
 }

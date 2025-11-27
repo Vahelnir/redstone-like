@@ -112,6 +112,10 @@ export class RedstoneCable extends RedstoneElement {
       { north: false, south: false, east: false, west: false },
     );
   }
+
+  sendPowerTo(target: RedstoneElement, power: number): number {
+    return this.power - 1;
+  }
 }
 
 function createRedstoneCable({ directions }: { directions: Directions }) {

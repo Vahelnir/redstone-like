@@ -53,18 +53,21 @@ export class RedstoneRepeater extends RedstoneElement {
     }
   }
 
-  receivePowerFrom(source: RedstoneElement, power: number): void {
-    console.log(
-      "Repeater received power",
-      power,
-      "from",
-      source.position,
-      "and expected",
-      this.inputPosition,
-    );
+  receivePowerFrom(source: RedstoneElement, power: number) {
     if (source.position.equals(this.inputPosition)) {
       this.power = Math.max(this.power, power);
+      return true;
     }
+
+    return false;
+  }
+
+  sendPowerTo(target: RedstoneElement) {
+    if (target.position.equals(this.outputPosition)) {
+      return this.outputPower;
+    }
+
+    return 0;
   }
 
   get inputPosition(): Position {
