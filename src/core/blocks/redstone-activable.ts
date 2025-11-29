@@ -1,5 +1,5 @@
 import { BoxGeometry, Mesh, MeshStandardMaterial } from "three";
-import type { Position } from "./position";
+import type { Position } from "../position";
 import { RedstoneElement } from "./redstone-element";
 
 export class RedstoneActivable extends RedstoneElement {

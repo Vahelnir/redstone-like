@@ -1,5 +1,5 @@
 import { Position } from "../position";
-import type { RedstoneElement } from "../redstone-element";
+import type { RedstoneElement } from "../blocks/redstone-element";
 import { POSSIBLE_NEIGHBORS, RedstoneNetwork } from "./redstone-network";
 
 export class NetworkFinder {

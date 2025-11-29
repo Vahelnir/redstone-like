@@ -1,9 +1,9 @@
 import type { Position } from "../position";
-import { RedstoneActivable } from "../redstone-activable";
-import type { RedstoneElement } from "../redstone-element";
-import { RedstoneInvertor } from "../redstone-invertor";
-import { RedstoneRepeater } from "../redstone-repeater";
-import { RedstoneSource } from "../redstone-source";
+import { RedstoneActivable } from "../blocks/redstone-activable";
+import type { RedstoneElement } from "../blocks/redstone-element";
+import { RedstoneInvertor } from "../blocks/redstone-invertor";
+import { RedstoneRepeater } from "../blocks/redstone-repeater";
+import { RedstoneSource } from "../blocks/redstone-source";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
 export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [

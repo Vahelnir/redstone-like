@@ -9,9 +9,9 @@ import {
 } from "three";
 
 import { mergeGeometries } from "three/examples/jsm/utils/BufferGeometryUtils.js";
-import type { Position } from "./position";
+import type { Position } from "../position";
 import { RedstoneElement } from "./redstone-element";
-import type { RedstoneNetwork } from "./network/redstone-network";
+import type { RedstoneNetwork } from "../network/redstone-network";
 
 type Directions = {
   north?: boolean | "up";

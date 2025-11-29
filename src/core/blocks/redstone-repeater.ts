@@ -5,7 +5,7 @@ import {
   MeshStandardMaterial,
   Vector3,
 } from "three";
-import type { Position } from "./position";
+import type { Position } from "../position";
 import { RedstoneElement } from "./redstone-element";
 
 export type RepeaterDirection = "north" | "south" | "east" | "west";

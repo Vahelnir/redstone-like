@@ -1,4 +1,4 @@
-import type { RedstoneElement } from "../redstone-element";
+import type { RedstoneElement } from "../blocks/redstone-element";
 import { NetworkFinder } from "./network-finder";
 import { RedstoneNetwork } from "./redstone-network";
 

@@ -1,17 +1,14 @@
 import { Scene, Vector3 } from "three";
-import { RedstoneCable } from "../core/redstone-cable";
-import { RedstoneElement } from "../core/redstone-element";
-import { RedstoneSource } from "../core/redstone-source";
+import { RedstoneCable } from "../core/blocks/redstone-cable";
+import { RedstoneElement } from "../core/blocks/redstone-element";
+import { RedstoneSource } from "../core/blocks/redstone-source";
 import { createCube } from "./create-cube";
-import { createRedstoneCable } from "./create-redstone-cable";
-import type { RedstoneNetwork } from "../core/network/redstone-network";
-import { RedstoneActivable } from "../core/redstone-activable";
-import { RedstoneRepeater } from "../core/redstone-repeater";
-import { RedstoneInvertor } from "../core/redstone-invertor";
+import { RedstoneActivable } from "../core/blocks/redstone-activable";
+import { RedstoneRepeater } from "../core/blocks/redstone-repeater";
+import { RedstoneInvertor } from "../core/blocks/redstone-invertor";
 
 export function displayBlocks(
   scene: Scene,
-  networks: RedstoneNetwork[],
   redstoneMap: Map<string, RedstoneElement>,
 ) {
   for (const redstone of redstoneMap.values()) {

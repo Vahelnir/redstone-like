@@ -1,10 +1,10 @@
 import { Mesh } from "three/src/objects/Mesh.js";
-import type { Position } from "./position";
+import type { Position } from "../position";
 import { RedstoneElement } from "./redstone-element";
 import { MeshStandardMaterial } from "three/src/materials/Materials.js";
 import { BoxGeometry } from "three/src/geometries/Geometries.js";
 import { Group } from "three";
-import type { RedstoneNetwork } from "./network/redstone-network";
+import type { RedstoneNetwork } from "../network/redstone-network";
 
 export class RedstoneInvertor extends RedstoneElement {
   power = 0;

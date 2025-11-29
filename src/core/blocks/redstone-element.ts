@@ -1,5 +1,5 @@
-import type { RedstoneNetwork } from "./network/redstone-network";
-import type { Position } from "./position";
+import type { RedstoneNetwork } from "../network/redstone-network";
+import type { Position } from "../position";
 
 export abstract class RedstoneElement {
   position: Position;

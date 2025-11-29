@@ -7,15 +7,16 @@ import {
 } from "three";
 import { OrbitControls } from "three/addons/controls/OrbitControls.js";
 
-import { RedstoneCable } from "./core/redstone-cable";
 import { Position } from "./core/position";
 import { findRedstoneNetworks } from "./core/network/find-redstone-networks";
-import { RedstoneElement } from "./core/redstone-element";
-import { RedstoneSource } from "./core/redstone-source";
 import { displayBlocks } from "./renderer/display-blocks";
-import { RedstoneActivable } from "./core/redstone-activable";
-import { RedstoneRepeater } from "./core/redstone-repeater";
-import { RedstoneInvertor } from "./core/redstone-invertor";
+
+import { RedstoneCable } from "./core/blocks/redstone-cable";
+import { RedstoneElement } from "./core/blocks/redstone-element";
+import { RedstoneSource } from "./core/blocks/redstone-source";
+import { RedstoneActivable } from "./core/blocks/redstone-activable";
+import { RedstoneRepeater } from "./core/blocks/redstone-repeater";
+import { RedstoneInvertor } from "./core/blocks/redstone-invertor";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -93,7 +94,7 @@ const redstoneMap = new Map<string, RedstoneElement>(
 const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
 
 console.log(redstones);
-displayBlocks(scene, redstoneNetworks, redstoneMap);
+displayBlocks(scene, redstoneMap);
 
 let lastTick = performance.now();
 const TICKS_PER_SECOND = 20;
