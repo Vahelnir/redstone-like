@@ -69,6 +69,10 @@ export class RedstoneInvertor extends RedstoneElement {
     return 0;
   }
 
+  canEmitPower(): boolean {
+    return true;
+  }
+
   get inputPosition(): Position {
     if (this.direction === "north") {
       return this.position.translate(0, 0, 1);

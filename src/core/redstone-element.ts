@@ -13,4 +13,8 @@ export abstract class RedstoneElement {
 
   abstract receivePowerFrom(source: RedstoneElement, power: number): boolean;
   abstract sendPowerTo(target: RedstoneElement): number;
+
+  canEmitPower(): boolean {
+    return false;
+  }
 }

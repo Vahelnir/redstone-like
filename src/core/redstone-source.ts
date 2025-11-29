@@ -19,8 +19,12 @@ export class RedstoneSource extends RedstoneElement {
     return false;
   }
 
-  sendPowerTo(_target: RedstoneElement, _power: number): number {
+  sendPowerTo(_target: RedstoneElement): number {
     return this.outputPower;
+  }
+
+  canEmitPower(): boolean {
+    return true;
   }
 
   redstoneTick() {}

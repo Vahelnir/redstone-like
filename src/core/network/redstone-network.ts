@@ -2,6 +2,8 @@ import type { Position } from "../position";
 import { RedstoneActivable } from "../redstone-activable";
 import type { RedstoneElement } from "../redstone-element";
 import { RedstoneInvertor } from "../redstone-invertor";
+import { RedstoneRepeater } from "../redstone-repeater";
+import { RedstoneSource } from "../redstone-source";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
 export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
@@ -39,9 +41,13 @@ export class RedstoneNetwork {
       node.redstoneTick(this);
     }
 
-    const sourceNodes = this.#nodes.filter(
-      (node) => node instanceof RedstoneInvertor,
-    );
+    const priority = [RedstoneSource, RedstoneInvertor, RedstoneRepeater];
+    const sourceNodes = this.#nodes.filter((node) => node.canEmitPower());
+    sourceNodes.sort((a, b) => {
+      const aIndex = priority.findIndex((cls) => a instanceof cls);
+      const bIndex = priority.findIndex((cls) => b instanceof cls);
+      return aIndex - bIndex;
+    });
     const visited = new Set<string>();
     for (const sourceNode of sourceNodes) {
       const queue: RedstoneElement[] = [sourceNode];

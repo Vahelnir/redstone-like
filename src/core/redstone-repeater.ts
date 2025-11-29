@@ -105,6 +105,10 @@ export class RedstoneRepeater extends RedstoneElement {
     return 0;
   }
 
+  canEmitPower(): boolean {
+    return this.isActive;
+  }
+
   get inputPosition(): Position {
     if (this.direction === "north") {
       return this.position.translate(0, 0, 1);
