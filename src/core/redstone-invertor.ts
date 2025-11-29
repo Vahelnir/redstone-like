@@ -3,10 +3,11 @@ import type { Position } from "./position";
 import { RedstoneElement } from "./redstone-element";
 import { MeshStandardMaterial } from "three/src/materials/Materials.js";
 import { BoxGeometry } from "three/src/geometries/Geometries.js";
-import { Group, Vector3 } from "three";
+import { Group } from "three";
+import type { RedstoneNetwork } from "./network/redstone-network";
 
 export class RedstoneInvertor extends RedstoneElement {
-  inputPower = 0;
+  power = 0;
   direction: "north" | "south" | "east" | "west";
 
   mesh;
@@ -26,12 +27,8 @@ export class RedstoneInvertor extends RedstoneElement {
 
   render(): void {
     this.mesh.position.copy(this.position);
-    this.flame.material.color.setHex(
-      this.inputPower === 0 ? 0xff2222 : 0x330000,
-    );
-    this.flame.material.emissive.setHex(
-      this.inputPower === 0 ? 0xff4444 : 0x220000,
-    );
+    this.flame.material.color.setHex(this.power === 0 ? 0xff2222 : 0x330000);
+    this.flame.material.emissive.setHex(this.power === 0 ? 0xff4444 : 0x220000);
 
     // Reset rotation
     this.mesh.rotation.set(0, 0, 0);
@@ -52,20 +49,13 @@ export class RedstoneInvertor extends RedstoneElement {
     }
   }
 
-  redstoneTick(): void {}
+  redstoneTick(_network: RedstoneNetwork): void {}
 
   receivePowerFrom(source: RedstoneElement, power: number) {
     if (source.position.equals(this.inputPosition)) {
-      console.log(
-        "Invertor at",
-        this.position,
-        "receives power",
-        power,
-        "from",
-        source.position,
-      );
-      this.inputPower = Math.max(this.power, power);
-      return true;
+      const originalOutputPower = this.outputPower;
+      this.power = power;
+      return this.outputPower !== originalOutputPower;
     }
 
     return false;
@@ -73,12 +63,6 @@ export class RedstoneInvertor extends RedstoneElement {
 
   sendPowerTo(target: RedstoneElement) {
     if (target.position.equals(this.outputPosition)) {
-      console.log(
-        `Sending power ${this.outputPower} from invertor at`,
-        this.position,
-        "to",
-        target.position,
-      );
       return this.outputPower;
     }
 
@@ -118,7 +102,7 @@ export class RedstoneInvertor extends RedstoneElement {
   }
 
   get outputPower(): number {
-    return this.inputPower === 0 ? 15 : 0;
+    return this.power === 0 ? 15 : 0;
   }
 }
 

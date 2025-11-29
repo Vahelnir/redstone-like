@@ -44,33 +44,47 @@ const controls = new OrbitControls(camera, renderer.domElement);
 controls.enableDamping = true;
 controls.dampingFactor = 0.25;
 
-const redstones: RedstoneElement[] = [
-  new RedstoneSource(new Position(-2, 0, 0)),
-  new RedstoneCable(new Position(-1, 0, 0)),
-  new RedstoneCable(new Position(-1, 0, -1)),
-  new RedstoneCable(new Position(-1, 0, -2)),
-  new RedstoneCable(new Position(0, 0, -2)),
-  new RedstoneCable(new Position(1, 0, -2)),
-  new RedstoneCable(new Position(2, 0, -2)),
-  new RedstoneRepeater(new Position(2, 0, -3), "north"),
-  new RedstoneCable(new Position(2, 0, -4)),
-  new RedstoneInvertor(new Position(2, 0, -5), "north"),
-  new RedstoneCable(new Position(2, 0, -6)),
-  new RedstoneCable(new Position(3, 0, -2)),
-  new RedstoneCable(new Position(4, 0, -2)),
-  new RedstoneSource(new Position(5, 0, -2)),
-  new RedstoneCable(new Position(0, 0, 0)),
-  new RedstoneCable(new Position(1, 0, 0)),
-  new RedstoneCable(new Position(1, 1, 1)),
-  new RedstoneCable(new Position(2, 1, 0)),
-  new RedstoneActivable(new Position(3, 1, 0)),
-  new RedstoneActivable(new Position(4, 1, 0)),
+// const redstones: RedstoneElement[] = [
+//   new RedstoneSource(new Position(-2, 0, 0)),
+//   new RedstoneCable(new Position(-1, 0, 0)),
+//   new RedstoneCable(new Position(-1, 0, -1)),
+//   new RedstoneCable(new Position(-1, 0, -2)),
+//   new RedstoneCable(new Position(0, 0, -2)),
+//   new RedstoneCable(new Position(1, 0, -2)),
+//   new RedstoneCable(new Position(2, 0, -2)),
+//   new RedstoneRepeater(new Position(2, 0, -3), "north"),
+//   new RedstoneCable(new Position(2, 0, -4)),
+//   new RedstoneInvertor(new Position(2, 0, -5), "north"),
+//   new RedstoneCable(new Position(2, 0, -6)),
+//   new RedstoneCable(new Position(3, 0, -2)),
+//   new RedstoneCable(new Position(4, 0, -2)),
+//   new RedstoneSource(new Position(5, 0, -2)),
+//   new RedstoneCable(new Position(0, 0, 0)),
+//   new RedstoneCable(new Position(1, 0, 0)),
+//   new RedstoneCable(new Position(1, 1, 1)),
+//   new RedstoneCable(new Position(2, 1, 0)),
+//   new RedstoneActivable(new Position(3, 1, 0)),
+//   new RedstoneActivable(new Position(4, 1, 0)),
 
-  new RedstoneCable(new Position(5, 0, 5)),
-  new RedstoneCable(new Position(4, 1, 5)),
-  new RedstoneCable(new Position(5, 1, 4)),
-  new RedstoneCable(new Position(5, 1, 6)),
-  new RedstoneCable(new Position(6, 1, 5)),
+//   new RedstoneCable(new Position(5, 0, 5)),
+//   new RedstoneCable(new Position(4, 1, 5)),
+//   new RedstoneCable(new Position(5, 1, 4)),
+//   new RedstoneCable(new Position(5, 1, 6)),
+//   new RedstoneCable(new Position(6, 1, 5)),
+// ];
+
+const redstones: RedstoneElement[] = [
+  new RedstoneInvertor(new Position(0, 0, -2), "east"),
+  new RedstoneCable(new Position(1, 0, -1)),
+  new RedstoneCable(new Position(1, 0, -2)),
+  new RedstoneCable(new Position(-1, 0, -2)),
+  new RedstoneInvertor(new Position(0, 0, 1), "west"),
+  new RedstoneCable(new Position(1, 0, 1)),
+  new RedstoneCable(new Position(-1, 0, 1)),
+  new RedstoneCable(new Position(-1, 0, -1)),
+  new RedstoneRepeater(new Position(-1, 0, 0), "north"),
+  new RedstoneRepeater(new Position(1, 0, -1), "south", 2),
+  new RedstoneRepeater(new Position(1, 0, 0), "south", 2),
 ];
 
 const redstoneMap = new Map<string, RedstoneElement>(
@@ -83,16 +97,14 @@ displayBlocks(scene, redstoneNetworks, redstoneMap);
 
 // Tick réseaux à 20Hz
 let lastTick = performance.now();
-const TICKS_PER_SECOND = 0.1;
+const TICKS_PER_SECOND = 20;
 const TICK_INTERVAL = 1000 / TICKS_PER_SECOND; // 50ms
 
 function loop(t = 0) {
   // Tick réseaux à 20Hz
   const now = performance.now();
   if (now - lastTick >= TICK_INTERVAL || t === 0) {
-    for (const network of redstoneNetworks) {
-      network.tick();
-    }
+    tick();
     lastTick = now;
   }
 
@@ -101,5 +113,23 @@ function loop(t = 0) {
   renderer.render(scene, camera);
   requestAnimationFrame(loop);
 }
+
+function tick() {
+  for (const network of redstoneNetworks) {
+    network.tick();
+  }
+}
+
+const tickButton = document.createElement("button");
+tickButton.textContent = "Tick";
+tickButton.style.position = "absolute";
+tickButton.style.top = "10px";
+tickButton.style.left = "10px";
+tickButton.style.padding = "10px";
+tickButton.style.zIndex = "100";
+tickButton.onclick = () => {
+  tick();
+};
+document.body.appendChild(tickButton);
 
 loop();

@@ -10,18 +10,28 @@ import { RedstoneElement } from "./redstone-element";
 
 export type RepeaterDirection = "north" | "south" | "east" | "west";
 
+const TICK_DELAY = 2;
+
 export class RedstoneRepeater extends RedstoneElement {
-  ticksBeforeActivating = 2;
+  ticksBeforeActivating: number;
   ticksLeft: number;
 
+  inputPower = 0;
+
   direction: RepeaterDirection;
+  isActive = false;
 
   mesh;
   arrowMesh;
 
-  constructor(position: Position, direction: RepeaterDirection) {
+  constructor(
+    position: Position,
+    direction: RepeaterDirection,
+    delay: number = 1,
+  ) {
     super(position);
-    this.ticksLeft = this.ticksBeforeActivating;
+    this.ticksBeforeActivating = delay * TICK_DELAY;
+    this.ticksLeft = 0;
     this.direction = direction;
 
     this.mesh = createMesh();
@@ -31,7 +41,13 @@ export class RedstoneRepeater extends RedstoneElement {
 
   render() {
     this.mesh.position.copy(this.position);
-    this.mesh.material.color.setHex(this.isPowered ? 0x00ff00 : 0x666666);
+    if (this.isWaiting) {
+      this.mesh.material.color.setHex(0xffff00);
+    } else if (this.isActive) {
+      this.mesh.material.color.setHex(0x00ff00);
+    } else {
+      this.mesh.material.color.setHex(0x666666);
+    }
 
     let arrowDirection = new Vector3(0, 0, -1); // par défaut nord
     if (this.direction === "south") arrowDirection = new Vector3(0, 0, 1);
@@ -41,21 +57,40 @@ export class RedstoneRepeater extends RedstoneElement {
   }
 
   redstoneTick() {
-    // reset the ticks if it's already active
-    if (this.power <= 0 && this.ticksLeft !== this.ticksBeforeActivating) {
-      this.ticksLeft = this.ticksBeforeActivating;
+    this.#handleDelay();
+
+    this.inputPower = 0;
+  }
+
+  #handleDelay() {
+    if (this.isActive && this.isPowered) {
       return;
     }
 
-    if (this.power > 0 && this.ticksLeft > 0) {
+    if (this.isActive) {
+      this.isActive = false;
+      return;
+    }
+
+    if (this.ticksLeft > 0) {
       this.ticksLeft = Math.max(0, this.ticksLeft - 1);
+      if (this.ticksLeft === 0) {
+        this.isActive = true;
+      }
       return;
     }
   }
 
   receivePowerFrom(source: RedstoneElement, power: number) {
     if (source.position.equals(this.inputPosition)) {
-      this.power = Math.max(this.power, power);
+      if (power === this.inputPower) {
+        return false;
+      }
+
+      this.inputPower = power;
+      if (this.isPowered && this.ticksLeft === 0) {
+        this.ticksLeft = this.ticksBeforeActivating;
+      }
       return true;
     }
 
@@ -102,12 +137,12 @@ export class RedstoneRepeater extends RedstoneElement {
     return this.position.translate(-1, 0, 0);
   }
 
-  get isActive(): boolean {
-    return this.ticksLeft === 0;
+  get isPowered(): boolean {
+    return this.inputPower > 0;
   }
 
-  get isPowered(): boolean {
-    return this.power > 0;
+  get isWaiting(): boolean {
+    return this.ticksLeft > 0 && !this.isActive;
   }
 
   get outputPower(): number {

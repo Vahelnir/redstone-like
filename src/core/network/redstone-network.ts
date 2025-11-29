@@ -1,7 +1,7 @@
 import type { Position } from "../position";
 import { RedstoneActivable } from "../redstone-activable";
 import type { RedstoneElement } from "../redstone-element";
-import { RedstoneSource } from "../redstone-source";
+import { RedstoneInvertor } from "../redstone-invertor";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
 export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
@@ -37,21 +37,16 @@ export class RedstoneNetwork {
   tick() {
     for (const node of this.#nodes) {
       node.redstoneTick(this);
-      node.power = 0;
     }
 
     const sourceNodes = this.#nodes.filter(
-      (node) => node instanceof RedstoneSource,
+      (node) => node instanceof RedstoneInvertor,
     );
+    const visited = new Set<string>();
     for (const sourceNode of sourceNodes) {
-      const initialPower = sourceNode.power;
-      const visited = new Set<string>();
-      const queue: {
-        node: RedstoneElement;
-        power: number;
-      }[] = [{ node: sourceNode, power: initialPower }];
+      const queue: RedstoneElement[] = [sourceNode];
       while (queue.length > 0) {
-        const { node, power } = queue.shift()!;
+        const node = queue.shift()!;
         if (visited.has(node.position.toStringKey())) {
           continue;
         }
@@ -66,12 +61,14 @@ export class RedstoneNetwork {
 
         const neighbors = this.getNeighborsOf(node);
         for (const neighbor of neighbors) {
-          const sentPower = node.sendPowerTo(neighbor, power) ?? 0;
-          if (sentPower > 0) {
-            const accepted = neighbor.receivePowerFrom(node, sentPower);
+          const sentPower = Math.max(node.sendPowerTo(neighbor) ?? 0, 0);
+
+          const changed = neighbor.receivePowerFrom(node, sentPower);
+          if (changed) {
+            visited.delete(neighbor.position.toStringKey());
           }
 
-          queue.push({ node: neighbor, power: sentPower });
+          queue.push(neighbor);
         }
       }
     }

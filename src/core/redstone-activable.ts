@@ -3,6 +3,8 @@ import type { Position } from "./position";
 import { RedstoneElement } from "./redstone-element";
 
 export class RedstoneActivable extends RedstoneElement {
+  power = 0;
+
   mesh;
 
   constructor(position: Position) {
@@ -16,11 +18,19 @@ export class RedstoneActivable extends RedstoneElement {
     this.mesh.material.color.setHex(this.isActive ? 0x00ff00 : 0x666666);
   }
 
+  redstoneTick() {}
+
+  receivePowerFrom() {
+    return false;
+  }
+
+  sendPowerTo() {
+    return 0;
+  }
+
   get isActive(): boolean {
     return this.power > 0;
   }
-
-  redstoneTick() {}
 }
 
 function createRedstoneActivable() {
