@@ -3,7 +3,7 @@ import type { Position } from "./position";
 import { RedstoneElement } from "./redstone-element";
 
 export class RedstoneActivable extends RedstoneElement {
-  power = 0;
+  #receivedPowerFrom = new Map<string, number>();
 
   mesh;
 
@@ -20,8 +20,9 @@ export class RedstoneActivable extends RedstoneElement {
 
   redstoneTick() {}
 
-  receivePowerFrom() {
-    return false;
+  receivePowerFrom(source: RedstoneElement, power: number) {
+    this.#receivedPowerFrom.set(source.position.toStringKey(), power);
+    return true;
   }
 
   sendPowerTo() {
@@ -29,7 +30,7 @@ export class RedstoneActivable extends RedstoneElement {
   }
 
   get isActive(): boolean {
-    return this.power > 0;
+    return Math.max(...this.#receivedPowerFrom.values()) > 0;
   }
 }
 
