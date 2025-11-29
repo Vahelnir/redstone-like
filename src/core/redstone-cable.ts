@@ -50,7 +50,6 @@ export class RedstoneCable extends RedstoneElement {
     this.mesh = createRedstoneCable({
       directions: {},
     });
-    // Création du canvas, contexte et texture une seule fois par instance
     this.canvas = document.createElement("canvas");
     this.canvas.width = 128;
     this.canvas.height = 64;
@@ -68,7 +67,6 @@ export class RedstoneCable extends RedstoneElement {
     this.mesh.position.copy(this.position);
     this.mesh.geometry = getDirectionGeometry(this.direction);
 
-    // Met à jour le texte sur le canvas et la texture (pas de recréation)
     const ctx = this.ctx;
     ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     ctx.font = "bold 36px monospace";
@@ -136,10 +134,7 @@ function createRedstoneCable({ directions }: { directions: Directions }) {
   return mesh;
 }
 
-// Cache des géométries générées
-
 function getDirectionGeometry(directions: Directions) {
-  // Génère une clé unique pour le cache
   const key = [
     directions.north ? (directions.north === "up" ? "N^" : "N") : "",
     directions.south ? (directions.south === "up" ? "S^" : "S") : "",
@@ -219,5 +214,3 @@ function createRedstonePowerSprite(texture?: Texture) {
   });
   return new Sprite(material);
 }
-
-// plus de fonction createRedstonePowerText globale : tout est géré par instance

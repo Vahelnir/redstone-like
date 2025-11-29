@@ -30,7 +30,6 @@ export class RedstoneInvertor extends RedstoneElement {
     this.flame.material.color.setHex(this.power === 0 ? 0xff2222 : 0x330000);
     this.flame.material.emissive.setHex(this.power === 0 ? 0xff4444 : 0x220000);
 
-    // Reset rotation
     this.mesh.rotation.set(0, 0, 0);
     const angle = Math.PI / 2;
     switch (this.direction) {
@@ -119,20 +118,18 @@ export function createRedstoneTorch() {
   const group = new Group();
   const offsetY = -0.4;
 
-  // Bâton (bois)
   const stickHeight = 0.6;
   const stickGeom = new BoxGeometry(0.15, stickHeight, 0.15);
-  // Le bâton part du sol (y=0)
   stickGeom.translate(0, stickHeight / 2 + offsetY, -0.4);
+
   const stickMat = new MeshStandardMaterial({ color: 0x8b5a2b });
   const stick = new Mesh(stickGeom, stickMat);
   group.add(stick);
 
-  // Flamme (cube rouge)
   const flameSize = 0.18;
   const flameGeom = new BoxGeometry(flameSize, flameSize, flameSize);
-  // La flamme est posée sur le haut du bâton
   flameGeom.translate(0, stickHeight + flameSize / 2 + offsetY, -0.4);
+
   const flameMat = new MeshStandardMaterial();
   const flame = new Mesh(flameGeom, flameMat);
   group.add(flame);

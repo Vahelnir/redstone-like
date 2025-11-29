@@ -49,7 +49,7 @@ export class RedstoneRepeater extends RedstoneElement {
       this.mesh.material.color.setHex(0x666666);
     }
 
-    let arrowDirection = new Vector3(0, 0, -1); // par défaut nord
+    let arrowDirection = new Vector3(0, 0, -1);
     if (this.direction === "south") arrowDirection = new Vector3(0, 0, 1);
     if (this.direction === "east") arrowDirection = new Vector3(1, 0, 0);
     if (this.direction === "west") arrowDirection = new Vector3(-1, 0, 0);
@@ -164,9 +164,9 @@ function createMesh() {
 }
 
 function createRepeaterArrow() {
-  const origin = new Vector3(0, 0.25, 0); // ajuster selon la hauteur de ta box
+  const origin = new Vector3(0, 0.25, 0);
   const length = 0.5;
-  const color = 0xffd700; // jaune
+  const color = 0xffd700;
   const arrow = new ArrowHelper(
     new Vector3(0, 0, -1),
     origin,

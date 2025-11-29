@@ -32,14 +32,14 @@ export function createRedstoneRepeater({
 }
 
 export function createRepeaterArrow(direction: RepeaterDirection) {
-  let dir = new Vector3(0, 0, -1); // par défaut nord
+  let dir = new Vector3(0, 0, -1);
   if (direction === "south") dir = new Vector3(0, 0, 1);
   if (direction === "east") dir = new Vector3(1, 0, 0);
   if (direction === "west") dir = new Vector3(-1, 0, 0);
 
-  const origin = new Vector3(0, 0.25, 0); // ajuster selon la hauteur de ta box
+  const origin = new Vector3(0, 0.25, 0);
   const length = 0.5;
-  const color = 0xffd700; // jaune
+  const color = 0xffd700;
   const arrow = new ArrowHelper(dir, origin, length, color, 0.2, 0.1);
 
   return arrow;
