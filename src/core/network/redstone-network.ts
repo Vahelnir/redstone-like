@@ -59,12 +59,6 @@ export class RedstoneNetwork {
 
       visited.add(node.position.toStringKey());
 
-      // TODO: improve this logic to be more generic (all other blocks cannot propagate power)
-      // don't propagate power from activable blocks
-      if (node instanceof RedstoneActivable) {
-        continue;
-      }
-
       const neighbors = this.getNeighborsOf(node);
       for (const neighbor of neighbors) {
         const rawSentPower = node.sendPowerTo(neighbor);

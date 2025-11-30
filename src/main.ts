@@ -18,6 +18,9 @@ import { RedstoneElement } from "./core/blocks/redstone-element";
 import { RedstoneInvertor } from "./core/blocks/redstone-invertor";
 import { RedstoneButton } from "./core/blocks/redstone-button";
 import { RedstoneNetwork } from "./core/network/redstone-network";
+import { RedstoneActivable } from "./core/blocks/redstone-activable";
+import { RedstoneRepeater } from "./core/blocks/redstone-repeater";
+import { RedstoneSource } from "./core/blocks/redstone-source";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -90,6 +93,7 @@ controls.dampingFactor = 0.25;
 //   new RedstoneRepeater(new Position(1, 0, 0), "south", 2),
 // ];
 
+// RS NOR LATCH
 const redstones: RedstoneElement[] = [
   new RedstoneButton(new Position(0, 0, 0)),
   new RedstoneCable(new Position(1, 0, 0)),
