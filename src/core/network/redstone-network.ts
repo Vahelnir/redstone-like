@@ -44,9 +44,9 @@ export class RedstoneNetwork {
       const power = node.redstoneTick(this);
       const changed =
         this.previousPowerStates.get(node.position.toStringKey()) !== power;
-      this.previousPowerStates.set(node.position.toStringKey(), power);
       if (changed) {
         stack.push(node);
+        this.previousPowerStates.set(node.position.toStringKey(), power);
       }
     }
 

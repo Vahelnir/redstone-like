@@ -112,7 +112,7 @@ export class RedstoneCable extends RedstoneElement {
       { north: false, south: false, east: false, west: false },
     );
 
-    return this.outputPower;
+    return this.power;
   }
 
   receivePowerFrom(source: RedstoneElement, power: number) {
