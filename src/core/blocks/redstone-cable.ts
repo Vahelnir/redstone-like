@@ -124,7 +124,7 @@ export class RedstoneCable extends RedstoneElement {
     return this.power !== originalPower;
   }
 
-  sendPowerTo(target: RedstoneElement): number {
+  sendPowerTo(): number {
     return this.power - 1;
   }
 }

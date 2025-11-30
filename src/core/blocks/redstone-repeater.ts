@@ -10,8 +10,6 @@ import { RedstoneElement } from "./redstone-element";
 
 export type RepeaterDirection = "north" | "south" | "east" | "west";
 
-const TICK_DELAY = 2;
-
 export class RedstoneRepeater extends RedstoneElement {
   ticksBeforeActivating: number;
   ticksLeft: number;
@@ -30,7 +28,7 @@ export class RedstoneRepeater extends RedstoneElement {
     delay: number = 1,
   ) {
     super(position);
-    this.ticksBeforeActivating = delay * TICK_DELAY;
+    this.ticksBeforeActivating = delay;
     this.ticksLeft = 0;
     this.direction = direction;
 

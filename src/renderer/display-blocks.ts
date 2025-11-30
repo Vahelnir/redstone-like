@@ -6,6 +6,7 @@ import { createCube } from "./create-cube";
 import { RedstoneActivable } from "../core/blocks/redstone-activable";
 import { RedstoneRepeater } from "../core/blocks/redstone-repeater";
 import { RedstoneInvertor } from "../core/blocks/redstone-invertor";
+import { RedstoneButton } from "../core/blocks/redstone-button";
 
 export function displayBlocks(
   scene: Scene,
@@ -17,7 +18,8 @@ export function displayBlocks(
       redstone instanceof RedstoneSource ||
       redstone instanceof RedstoneActivable ||
       redstone instanceof RedstoneRepeater ||
-      redstone instanceof RedstoneInvertor
+      redstone instanceof RedstoneInvertor ||
+      redstone instanceof RedstoneButton
     ) {
       scene.add(redstone.mesh);
     }
