@@ -42,47 +42,38 @@ export class RedstoneNetwork {
       node.redstoneTick(this);
     }
 
-    const priority = [RedstoneSource, RedstoneInvertor, RedstoneRepeater];
-    const sourceNodes = this.#nodes.filter((node) => node.canEmitPower());
-    sourceNodes.sort((a, b) => {
-      const aIndex = priority.findIndex((cls) => a instanceof cls);
-      const bIndex = priority.findIndex((cls) => b instanceof cls);
-      return aIndex - bIndex;
-    });
     const visited = new Set<string>();
-    for (const sourceNode of sourceNodes) {
-      const queue: RedstoneElement[] = [sourceNode];
-      while (queue.length > 0) {
-        const node = queue.shift()!;
-        if (visited.has(node.position.toStringKey())) {
+    const stack: RedstoneElement[] = [...this.#nodes];
+    while (stack.length > 0) {
+      const node = stack.shift()!;
+      if (visited.has(node.position.toStringKey())) {
+        continue;
+      }
+
+      visited.add(node.position.toStringKey());
+
+      // TODO: improve this logic to be more generic (all other blocks cannot propagate power)
+      // don't propagate power from activable blocks
+      if (node instanceof RedstoneActivable) {
+        continue;
+      }
+
+      const neighbors = this.getNeighborsOf(node);
+      for (const neighbor of neighbors) {
+        const rawSentPower = node.sendPowerTo(neighbor);
+        if (rawSentPower === null) {
           continue;
         }
 
-        visited.add(node.position.toStringKey());
-
-        // TODO: improve this logic to be more generic (all other blocks cannot propagate power)
-        // don't propagate power from activable blocks
-        if (node instanceof RedstoneActivable) {
-          continue;
+        const sentPower = Math.max(rawSentPower, 0);
+        const changed = neighbor.receivePowerFrom(node, sentPower);
+        const bothAreCables =
+          neighbor instanceof RedstoneCable && node instanceof RedstoneCable;
+        if (changed && !bothAreCables) {
+          visited.delete(neighbor.position.toStringKey());
         }
 
-        const neighbors = this.getNeighborsOf(node);
-        for (const neighbor of neighbors) {
-          const rawSentPower = node.sendPowerTo(neighbor);
-          if (rawSentPower === null) {
-            continue;
-          }
-
-          const sentPower = Math.max(rawSentPower, 0);
-          const changed = neighbor.receivePowerFrom(node, sentPower);
-          const bothAreCables =
-            neighbor instanceof RedstoneCable && node instanceof RedstoneCable;
-          if (changed && !bothAreCables) {
-            visited.delete(neighbor.position.toStringKey());
-          }
-
-          queue.push(neighbor);
-        }
+        stack.unshift(neighbor);
       }
     }
   }
