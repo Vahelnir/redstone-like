@@ -18,7 +18,9 @@ export class RedstoneActivable extends RedstoneElement {
     this.mesh.material.color.setHex(this.isActive ? 0x00ff00 : 0x666666);
   }
 
-  redstoneTick() {}
+  redstoneTick() {
+    return 0;
+  }
 
   receivePowerFrom(source: RedstoneElement, power: number) {
     this.#receivedPowerFrom.set(source.position.toStringKey(), power);
@@ -34,7 +36,7 @@ export class RedstoneActivable extends RedstoneElement {
   }
 
   get isActive(): boolean {
-    return Math.max(...this.#receivedPowerFrom.values()) > 0;
+    return Math.max(...this.#receivedPowerFrom.values(), 0) > 0;
   }
 }
 

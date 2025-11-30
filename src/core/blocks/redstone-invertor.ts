@@ -4,7 +4,6 @@ import { RedstoneElement } from "./redstone-element";
 import { MeshStandardMaterial } from "three/src/materials/Materials.js";
 import { BoxGeometry } from "three/src/geometries/Geometries.js";
 import { Group } from "three";
-import type { RedstoneNetwork } from "../network/redstone-network";
 
 export class RedstoneInvertor extends RedstoneElement {
   power = 0;
@@ -49,13 +48,15 @@ export class RedstoneInvertor extends RedstoneElement {
     }
   }
 
-  redstoneTick(_network: RedstoneNetwork): void {}
+  redstoneTick() {
+    return this.outputPower;
+  }
 
   receivePowerFrom(source: RedstoneElement, power: number) {
     if (!source.position.equals(this.outputPosition)) {
       const originalOutputPower = this.outputPower;
       this.#receivedPowerFrom.set(source.position.toStringKey(), power);
-      this.power = Math.max(...this.#receivedPowerFrom.values());
+      this.power = Math.max(...this.#receivedPowerFrom.values(), 0);
       return this.outputPower !== originalOutputPower;
     }
 

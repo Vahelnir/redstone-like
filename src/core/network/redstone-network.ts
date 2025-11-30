@@ -37,13 +37,20 @@ export class RedstoneNetwork {
     ).filter((node) => node !== null);
   }
 
+  previousPowerStates = new Map<string, number>();
   tick() {
+    const stack: RedstoneElement[] = [];
     for (const node of this.nodes) {
-      node.redstoneTick(this);
+      const power = node.redstoneTick(this);
+      const changed =
+        this.previousPowerStates.get(node.position.toStringKey()) !== power;
+      this.previousPowerStates.set(node.position.toStringKey(), power);
+      if (changed) {
+        stack.push(node);
+      }
     }
 
     const visited = new Set<string>();
-    const stack: RedstoneElement[] = [...this.nodes];
     while (stack.length > 0) {
       const node = stack.shift()!;
       if (visited.has(node.position.toStringKey())) {

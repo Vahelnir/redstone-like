@@ -26,13 +26,15 @@ export class RedstoneButton extends RedstoneElement {
     this.ticksLeft = BUTTON_PRESS_TICK_DURATION;
   }
 
-  redstoneTick(): void {
+  redstoneTick() {
     if (this.ticksLeft > 0) {
       this.ticksLeft--;
       if (this.ticksLeft === 0) {
         this.mesh.geometry.translate(0, 0.1, 0);
       }
     }
+
+    return this.outputPower;
   }
 
   receivePowerFrom(): boolean {

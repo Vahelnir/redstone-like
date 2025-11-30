@@ -36,7 +36,6 @@ export class RedstoneCable extends RedstoneElement {
     west: false,
   };
 
-  power = 0;
   #receivedPowerFrom: Map<string, number> = new Map();
 
   mesh;
@@ -113,14 +112,12 @@ export class RedstoneCable extends RedstoneElement {
       { north: false, south: false, east: false, west: false },
     );
 
-    this.#receivedPowerFrom.clear();
-    this.power = 0;
+    return this.outputPower;
   }
 
   receivePowerFrom(source: RedstoneElement, power: number): boolean {
     const originalPower = this.power;
     this.#receivedPowerFrom.set(source.position.toStringKey(), power);
-    this.power = Math.max(...this.#receivedPowerFrom.values());
     return this.power !== originalPower;
   }
 
@@ -130,6 +127,14 @@ export class RedstoneCable extends RedstoneElement {
 
   getMesh() {
     return this.mesh;
+  }
+
+  get power() {
+    return Math.max(...this.#receivedPowerFrom.values(), 0);
+  }
+
+  get outputPower() {
+    return Math.max(this.power - 1, 0);
   }
 }
 

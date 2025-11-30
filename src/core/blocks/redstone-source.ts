@@ -31,7 +31,9 @@ export class RedstoneSource extends RedstoneElement {
     return this.mesh;
   }
 
-  redstoneTick() {}
+  redstoneTick() {
+    return this.outputPower;
+  }
 
   get outputPower(): number {
     return 15;

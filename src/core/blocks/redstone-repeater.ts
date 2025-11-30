@@ -57,7 +57,7 @@ export class RedstoneRepeater extends RedstoneElement {
   redstoneTick() {
     this.#handleDelay();
 
-    this.inputPower = 0;
+    return this.outputPower;
   }
 
   #handleDelay() {
