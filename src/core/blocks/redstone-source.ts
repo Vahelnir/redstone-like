@@ -1,4 +1,4 @@
-import { BoxGeometry, MeshStandardMaterial, Mesh } from "three";
+import { BoxGeometry, MeshStandardMaterial, Mesh, Object3D } from "three";
 import type { Position } from "../position";
 import { RedstoneElement } from "./redstone-element";
 
@@ -25,6 +25,10 @@ export class RedstoneSource extends RedstoneElement {
 
   canEmitPower(): boolean {
     return true;
+  }
+
+  getMesh() {
+    return this.mesh;
   }
 
   redstoneTick() {}

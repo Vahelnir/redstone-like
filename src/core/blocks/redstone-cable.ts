@@ -127,6 +127,10 @@ export class RedstoneCable extends RedstoneElement {
   sendPowerTo(): number {
     return this.power - 1;
   }
+
+  getMesh() {
+    return this.mesh;
+  }
 }
 
 function createRedstoneCable({ directions }: { directions: Directions }) {

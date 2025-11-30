@@ -1,9 +1,6 @@
 import type { Position } from "../position";
 import { RedstoneActivable } from "../blocks/redstone-activable";
 import type { RedstoneElement } from "../blocks/redstone-element";
-import { RedstoneInvertor } from "../blocks/redstone-invertor";
-import { RedstoneRepeater } from "../blocks/redstone-repeater";
-import { RedstoneSource } from "../blocks/redstone-source";
 import { RedstoneCable } from "../blocks/redstone-cable";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];

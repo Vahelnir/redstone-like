@@ -1,4 +1,4 @@
-import { BoxGeometry, MeshStandardMaterial, Mesh } from "three";
+import { BoxGeometry, MeshStandardMaterial, Mesh, Object3D } from "three";
 import type { Position } from "../position";
 import { RedstoneElement } from "./redstone-element";
 
@@ -20,8 +20,10 @@ export class RedstoneButton extends RedstoneElement {
   }
 
   onClick() {
+    if (!this.isClicked) {
+      this.mesh.geometry.translate(0, -0.1, 0);
+    }
     this.ticksLeft = BUTTON_PRESS_TICK_DURATION;
-    this.mesh.geometry.translate(0, -0.1, 0);
   }
 
   redstoneTick(): void {
@@ -43,6 +45,10 @@ export class RedstoneButton extends RedstoneElement {
 
   canEmitPower(): boolean {
     return this.isClicked;
+  }
+
+  getMesh() {
+    return this.mesh;
   }
 
   get isClicked(): boolean {

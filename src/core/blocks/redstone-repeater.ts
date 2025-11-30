@@ -107,6 +107,10 @@ export class RedstoneRepeater extends RedstoneElement {
     return this.isActive;
   }
 
+  getMesh() {
+    return this.mesh;
+  }
+
   get inputPosition(): Position {
     if (this.direction === "north") {
       return this.position.translate(0, 0, 1);

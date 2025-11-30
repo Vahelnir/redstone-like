@@ -29,6 +29,10 @@ export class RedstoneActivable extends RedstoneElement {
     return 0;
   }
 
+  getMesh() {
+    return this.mesh;
+  }
+
   get isActive(): boolean {
     return Math.max(...this.#receivedPowerFrom.values()) > 0;
   }

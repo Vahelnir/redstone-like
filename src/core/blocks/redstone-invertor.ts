@@ -74,6 +74,10 @@ export class RedstoneInvertor extends RedstoneElement {
     return true;
   }
 
+  getMesh() {
+    return this.mesh;
+  }
+
   get outputPosition(): Position {
     if (this.direction === "north") {
       return this.position.translate(0, 0, -1);

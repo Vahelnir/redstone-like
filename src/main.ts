@@ -109,25 +109,16 @@ const redstones: RedstoneElement[] = [
   new RedstoneButton(new Position(4, 0, 4)),
 ];
 
-const redstoneMap = new Map<string, RedstoneElement>(
+const world = new Map<string, RedstoneElement>(
   redstones.map((redstone) => [redstone.position.toStringKey(), redstone]),
 );
 const redstoneNetworks = findRedstoneNetworks(redstones.map((r) => r));
 
 console.log(redstones);
-displayBlocks(scene, redstoneMap);
+displayBlocks(scene, world);
 
 const raycaster = new Raycaster();
 const mouse = new Vector2();
-
-const meshToBlock = new Map<number, RedstoneElement>();
-const idToMesh = new Map<number, Object3D>();
-for (const block of redstones) {
-  if ("mesh" in block && block.mesh instanceof Object3D) {
-    meshToBlock.set(block.mesh.id, block);
-    idToMesh.set(block.mesh.id, block.mesh);
-  }
-}
 
 renderer.domElement.addEventListener("pointerdown", (event) => {
   const rect = renderer.domElement.getBoundingClientRect();
@@ -135,11 +126,13 @@ renderer.domElement.addEventListener("pointerdown", (event) => {
   mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
   raycaster.setFromCamera(mouse, camera);
 
-  const meshes = Array.from(meshToBlock.keys()).map((id) => idToMesh.get(id)!);
+  const meshes = Array.from(world.keys())
+    .map((id) => world.get(id)?.getMesh())
+    .filter((m): m is Object3D => m !== null);
   const intersects = raycaster.intersectObjects(meshes, false);
   if (intersects.length > 0) {
     const mesh = intersects[0].object;
-    const block = meshToBlock.get(mesh.id);
+    const block = world.get(Position.fromVector3(mesh.position).toStringKey());
     if (block && "onClick" in block && typeof block.onClick === "function") {
       block.onClick?.();
     }

@@ -1,27 +1,17 @@
 import { Scene, Vector3 } from "three";
-import { RedstoneCable } from "../core/blocks/redstone-cable";
 import { RedstoneElement } from "../core/blocks/redstone-element";
-import { RedstoneSource } from "../core/blocks/redstone-source";
 import { createCube } from "./create-cube";
-import { RedstoneActivable } from "../core/blocks/redstone-activable";
-import { RedstoneRepeater } from "../core/blocks/redstone-repeater";
-import { RedstoneInvertor } from "../core/blocks/redstone-invertor";
-import { RedstoneButton } from "../core/blocks/redstone-button";
 
 export function displayBlocks(
   scene: Scene,
   redstoneMap: Map<string, RedstoneElement>,
 ) {
   for (const redstone of redstoneMap.values()) {
-    if (
-      redstone instanceof RedstoneCable ||
-      redstone instanceof RedstoneSource ||
-      redstone instanceof RedstoneActivable ||
-      redstone instanceof RedstoneRepeater ||
-      redstone instanceof RedstoneInvertor ||
-      redstone instanceof RedstoneButton
-    ) {
-      scene.add(redstone.mesh);
+    if (redstone instanceof RedstoneElement) {
+      const mesh = redstone.getMesh();
+      if (mesh) {
+        scene.add(mesh);
+      }
     }
 
     const blockPosition = redstone.position.clone();

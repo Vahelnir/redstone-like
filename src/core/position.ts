@@ -1,3 +1,5 @@
+import type { Vector3 } from "three";
+
 export class Position {
   x: number;
   y: number;
@@ -32,5 +34,9 @@ export class Position {
   static fromStringKey(key: string): Position {
     const [x, y, z] = key.split(",").map(Number);
     return new Position(x, y, z);
+  }
+
+  static fromVector3(position: Vector3) {
+    return new Position(position.x, position.y, position.z);
   }
 }
