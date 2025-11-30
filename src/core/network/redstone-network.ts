@@ -1,6 +1,6 @@
 import type { Position } from "../position";
 import { RedstoneActivable } from "../blocks/redstone-activable";
-import type { RedstoneElement } from "../blocks/redstone-element";
+import { RedstoneElement } from "../blocks/redstone-element";
 import { RedstoneCable } from "../blocks/redstone-cable";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
@@ -12,16 +12,19 @@ export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
 ]);
 
 export class RedstoneNetwork {
-  #nodes: RedstoneElement[];
   #nodeMap: Map<string, RedstoneElement>;
 
-  constructor() {
-    this.#nodes = [];
+  constructor(world: Map<string, RedstoneElement> = new Map()) {
     this.#nodeMap = new Map<string, RedstoneElement>();
+    world.forEach((node) => {
+      if (node instanceof RedstoneElement) {
+        this.addNode(node);
+      }
+    });
   }
 
   get nodes() {
-    return this.#nodes;
+    return Array.from(this.#nodeMap.values());
   }
 
   getNeighborsOf(redstoneElement: RedstoneElement): RedstoneElement[] {
@@ -35,12 +38,12 @@ export class RedstoneNetwork {
   }
 
   tick() {
-    for (const node of this.#nodes) {
+    for (const node of this.nodes) {
       node.redstoneTick(this);
     }
 
     const visited = new Set<string>();
-    const stack: RedstoneElement[] = [...this.#nodes];
+    const stack: RedstoneElement[] = [...this.nodes];
     while (stack.length > 0) {
       const node = stack.shift()!;
       if (visited.has(node.position.toStringKey())) {
@@ -84,7 +87,6 @@ export class RedstoneNetwork {
       return;
     }
 
-    this.#nodes.push(redstone);
     this.#nodeMap.set(redstone.position.toStringKey(), redstone);
   }
 
