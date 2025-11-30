@@ -82,17 +82,16 @@ export class RedstoneRepeater extends RedstoneElement {
   receivePowerFrom(source: RedstoneElement, power: number) {
     if (source.position.equals(this.inputPosition)) {
       if (power === this.inputPower) {
-        return false;
+        return this.outputPower;
       }
 
       this.inputPower = power;
       if (this.isPowered && this.ticksLeft === 0) {
         this.ticksLeft = this.ticksBeforeActivating;
       }
-      return true;
     }
 
-    return false;
+    return this.outputPower;
   }
 
   sendPowerTo(target: RedstoneElement) {

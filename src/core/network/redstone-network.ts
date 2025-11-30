@@ -73,10 +73,17 @@ export class RedstoneNetwork {
         }
 
         const sentPower = Math.max(rawSentPower, 0);
-        const changed = neighbor.receivePowerFrom(node, sentPower);
+        const newPower = neighbor.receivePowerFrom(node, sentPower);
         const bothAreCables =
           neighbor instanceof RedstoneCable && node instanceof RedstoneCable;
+        const changed =
+          newPower !==
+          this.previousPowerStates.get(neighbor.position.toStringKey());
         if (changed && !bothAreCables) {
+          this.previousPowerStates.set(
+            neighbor.position.toStringKey(),
+            newPower,
+          );
           visited.delete(neighbor.position.toStringKey());
         }
 

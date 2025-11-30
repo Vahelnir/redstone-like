@@ -37,8 +37,8 @@ export class RedstoneButton extends RedstoneElement {
     return this.outputPower;
   }
 
-  receivePowerFrom(): boolean {
-    return false;
+  receivePowerFrom(): number {
+    return this.outputPower;
   }
 
   sendPowerTo(): number {

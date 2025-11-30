@@ -24,7 +24,7 @@ export class RedstoneActivable extends RedstoneElement {
 
   receivePowerFrom(source: RedstoneElement, power: number) {
     this.#receivedPowerFrom.set(source.position.toStringKey(), power);
-    return true;
+    return 0;
   }
 
   sendPowerTo() {

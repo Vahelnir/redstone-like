@@ -15,8 +15,8 @@ export class RedstoneSource extends RedstoneElement {
     this.mesh.position.copy(this.position);
   }
 
-  receivePowerFrom(_source: RedstoneElement, _power: number): boolean {
-    return false;
+  receivePowerFrom(_source: RedstoneElement, _power: number) {
+    return this.outputPower;
   }
 
   sendPowerTo(_target: RedstoneElement): number {

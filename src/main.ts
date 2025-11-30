@@ -106,6 +106,26 @@ const redstones: RedstoneElement[] = [
   new RedstoneButton(new Position(4, 0, 4)),
 ];
 
+// const redstones: RedstoneElement[] = [
+//   new RedstoneButton(new Position(0, 0, 0)),
+//   new RedstoneCable(new Position(1, 0, 0)),
+//   new RedstoneCable(new Position(2, 0, 0)),
+//   new RedstoneCable(new Position(3, 0, 0)),
+//   new RedstoneCable(new Position(4, 0, 0)),
+//   new RedstoneCable(new Position(5, 0, 0)),
+//   new RedstoneCable(new Position(6, 0, 0)),
+//   new RedstoneCable(new Position(7, 0, 0)),
+//   new RedstoneCable(new Position(8, 0, 0)),
+//   new RedstoneCable(new Position(9, 0, 0)),
+//   new RedstoneCable(new Position(10, 0, 0)),
+//   new RedstoneCable(new Position(11, 0, 0)),
+//   new RedstoneCable(new Position(12, 0, 0)),
+//   new RedstoneCable(new Position(13, 0, 0)),
+//   new RedstoneCable(new Position(14, 0, 0)),
+//   new RedstoneCable(new Position(15, 0, 0)),
+//   new RedstoneCable(new Position(16, 0, 0)),
+// ];
+
 const world = new Map<string, RedstoneElement>(
   redstones.map((redstone) => [redstone.position.toStringKey(), redstone]),
 );

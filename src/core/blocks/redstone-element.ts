@@ -12,7 +12,7 @@ export abstract class RedstoneElement {
   abstract render(): void;
   abstract redstoneTick(network: RedstoneNetwork): number;
 
-  abstract receivePowerFrom(source: RedstoneElement, power: number): boolean;
+  abstract receivePowerFrom(source: RedstoneElement, power: number): number;
   abstract sendPowerTo(target: RedstoneElement): number | null;
   abstract getMesh(): Object3D | null;
 

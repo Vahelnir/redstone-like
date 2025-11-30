@@ -115,13 +115,19 @@ export class RedstoneCable extends RedstoneElement {
     return this.outputPower;
   }
 
-  receivePowerFrom(source: RedstoneElement, power: number): boolean {
-    const originalPower = this.power;
+  receivePowerFrom(source: RedstoneElement, power: number) {
     this.#receivedPowerFrom.set(source.position.toStringKey(), power);
-    return this.power !== originalPower;
+    return this.power;
   }
 
-  sendPowerTo(): number {
+  sendPowerTo(target: RedstoneElement) {
+    const receivedPower = this.#receivedPowerFrom.get(
+      target.position.toStringKey(),
+    );
+    if (receivedPower !== undefined && receivedPower > 0) {
+      return 0;
+    }
+
     return this.power - 1;
   }
 

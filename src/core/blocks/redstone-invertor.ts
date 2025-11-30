@@ -54,13 +54,11 @@ export class RedstoneInvertor extends RedstoneElement {
 
   receivePowerFrom(source: RedstoneElement, power: number) {
     if (!source.position.equals(this.outputPosition)) {
-      const originalOutputPower = this.outputPower;
       this.#receivedPowerFrom.set(source.position.toStringKey(), power);
       this.power = Math.max(...this.#receivedPowerFrom.values(), 0);
-      return this.outputPower !== originalOutputPower;
     }
 
-    return false;
+    return this.outputPower;
   }
 
   sendPowerTo(target: RedstoneElement) {
