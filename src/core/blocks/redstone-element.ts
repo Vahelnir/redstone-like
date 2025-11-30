@@ -12,7 +12,7 @@ export abstract class RedstoneElement {
   abstract redstoneTick(network: RedstoneNetwork): void;
 
   abstract receivePowerFrom(source: RedstoneElement, power: number): boolean;
-  abstract sendPowerTo(target: RedstoneElement): number;
+  abstract sendPowerTo(target: RedstoneElement): number | null;
 
   canEmitPower(): boolean {
     return false;

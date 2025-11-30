@@ -4,6 +4,7 @@ import type { RedstoneElement } from "../blocks/redstone-element";
 import { RedstoneInvertor } from "../blocks/redstone-invertor";
 import { RedstoneRepeater } from "../blocks/redstone-repeater";
 import { RedstoneSource } from "../blocks/redstone-source";
+import { RedstoneCable } from "../blocks/redstone-cable";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
 export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
@@ -67,10 +68,16 @@ export class RedstoneNetwork {
 
         const neighbors = this.getNeighborsOf(node);
         for (const neighbor of neighbors) {
-          const sentPower = Math.max(node.sendPowerTo(neighbor) ?? 0, 0);
+          const rawSentPower = node.sendPowerTo(neighbor);
+          if (rawSentPower === null) {
+            continue;
+          }
 
+          const sentPower = Math.max(rawSentPower, 0);
           const changed = neighbor.receivePowerFrom(node, sentPower);
-          if (changed) {
+          const bothAreCables =
+            neighbor instanceof RedstoneCable && node instanceof RedstoneCable;
+          if (changed && !bothAreCables) {
             visited.delete(neighbor.position.toStringKey());
           }
 

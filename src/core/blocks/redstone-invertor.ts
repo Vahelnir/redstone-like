@@ -9,6 +9,7 @@ import type { RedstoneNetwork } from "../network/redstone-network";
 export class RedstoneInvertor extends RedstoneElement {
   power = 0;
   direction: "north" | "south" | "east" | "west";
+  #receivedPowerFrom = new Map<string, number>();
 
   mesh;
   flame;
@@ -51,9 +52,10 @@ export class RedstoneInvertor extends RedstoneElement {
   redstoneTick(_network: RedstoneNetwork): void {}
 
   receivePowerFrom(source: RedstoneElement, power: number) {
-    if (source.position.equals(this.inputPosition)) {
+    if (!source.position.equals(this.outputPosition)) {
       const originalOutputPower = this.outputPower;
-      this.power = power;
+      this.#receivedPowerFrom.set(source.position.toStringKey(), power);
+      this.power = Math.max(...this.#receivedPowerFrom.values());
       return this.outputPower !== originalOutputPower;
     }
 
@@ -65,27 +67,11 @@ export class RedstoneInvertor extends RedstoneElement {
       return this.outputPower;
     }
 
-    return 0;
+    return null;
   }
 
   canEmitPower(): boolean {
     return true;
-  }
-
-  get inputPosition(): Position {
-    if (this.direction === "north") {
-      return this.position.translate(0, 0, 1);
-    }
-
-    if (this.direction === "south") {
-      return this.position.translate(0, 0, -1);
-    }
-
-    if (this.direction === "east") {
-      return this.position.translate(-1, 0, 0);
-    }
-
-    return this.position.translate(1, 0, 0);
   }
 
   get outputPosition(): Position {

@@ -96,7 +96,17 @@ controls.dampingFactor = 0.25;
 const redstones: RedstoneElement[] = [
   new RedstoneButton(new Position(0, 0, 0)),
   new RedstoneCable(new Position(1, 0, 0)),
-  new RedstoneCable(new Position(2, 0, 0)),
+  new RedstoneInvertor(new Position(2, 0, 0), "east"),
+  new RedstoneCable(new Position(3, 0, 0)),
+  new RedstoneCable(new Position(4, 0, 0)),
+  new RedstoneCable(new Position(4, 0, 1)),
+  new RedstoneInvertor(new Position(4, 0, 2), "west"),
+  new RedstoneCable(new Position(3, 0, 2)),
+  new RedstoneCable(new Position(2, 0, 2)),
+  new RedstoneCable(new Position(2, 0, 1)),
+
+  new RedstoneCable(new Position(4, 0, 3)),
+  new RedstoneButton(new Position(4, 0, 4)),
 ];
 
 const redstoneMap = new Map<string, RedstoneElement>(

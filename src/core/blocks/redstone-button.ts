@@ -15,7 +15,9 @@ export class RedstoneButton extends RedstoneElement {
     this.mesh = createButtonMesh();
   }
 
-  render(): void {}
+  render(): void {
+    this.mesh.position.copy(this.position);
+  }
 
   onClick() {
     this.ticksLeft = BUTTON_PRESS_TICK_DURATION;
