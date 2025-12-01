@@ -1,7 +1,7 @@
 import type { Position } from "../position";
-import { RedstoneActivable } from "../blocks/redstone-activable";
 import { RedstoneElement } from "../blocks/redstone-element";
 import { RedstoneCable } from "../blocks/redstone-cable";
+import type { Block } from "../blocks/block";
 
 const ALLOWED_HEIGHT_DIFFS = [-1, 0, 1];
 export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
@@ -14,7 +14,7 @@ export const POSSIBLE_NEIGHBORS = ALLOWED_HEIGHT_DIFFS.flatMap((dy) => [
 export class RedstoneNetwork {
   #nodeMap: Map<string, RedstoneElement>;
 
-  constructor(world: Map<string, RedstoneElement> = new Map()) {
+  constructor(world: Map<string, Block> = new Map()) {
     this.#nodeMap = new Map<string, RedstoneElement>();
     world.forEach((node) => {
       if (node instanceof RedstoneElement) {

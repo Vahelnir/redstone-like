@@ -69,10 +69,6 @@ export class RedstoneInvertor extends RedstoneElement {
     return null;
   }
 
-  canEmitPower(): boolean {
-    return true;
-  }
-
   getMesh() {
     return this.mesh;
   }

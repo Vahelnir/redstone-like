@@ -102,10 +102,6 @@ export class RedstoneRepeater extends RedstoneElement {
     return 0;
   }
 
-  canEmitPower(): boolean {
-    return this.isActive;
-  }
-
   getMesh() {
     return this.mesh;
   }

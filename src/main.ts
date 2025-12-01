@@ -21,6 +21,9 @@ import { RedstoneNetwork } from "./core/network/redstone-network";
 import { RedstoneActivable } from "./core/blocks/redstone-activable";
 import { RedstoneRepeater } from "./core/blocks/redstone-repeater";
 import { RedstoneSource } from "./core/blocks/redstone-source";
+import { RedstoneTorch } from "./core/blocks/redstone-torch";
+import type { Block } from "./core/blocks/block";
+import { GroundBlock } from "./core/blocks/ground-block";
 
 const rendererSize = {
   width: window.innerWidth,
@@ -94,22 +97,23 @@ controls.dampingFactor = 0.25;
 // ];
 
 // RS NOR LATCH
-const redstones: RedstoneElement[] = [
-  new RedstoneButton(new Position(0, 0, 0)),
-  new RedstoneCable(new Position(1, 0, 0)),
-  new RedstoneInvertor(new Position(2, 0, 0), "east"),
-  new RedstoneCable(new Position(3, 0, 0)),
-  new RedstoneCable(new Position(4, 0, 0)),
-  new RedstoneCable(new Position(4, 0, 1)),
-  new RedstoneInvertor(new Position(4, 0, 2), "west"),
-  new RedstoneCable(new Position(3, 0, 2)),
-  new RedstoneCable(new Position(2, 0, 2)),
-  new RedstoneCable(new Position(2, 0, 1)),
+// const redstones: RedstoneElement[] = [
+//   new RedstoneButton(new Position(0, 0, 0)),
+//   new RedstoneCable(new Position(1, 0, 0)),
+//   new RedstoneInvertor(new Position(2, 0, 0), "east"),
+//   new RedstoneCable(new Position(3, 0, 0)),
+//   new RedstoneCable(new Position(4, 0, 0)),
+//   new RedstoneCable(new Position(4, 0, 1)),
+//   new RedstoneInvertor(new Position(4, 0, 2), "west"),
+//   new RedstoneCable(new Position(3, 0, 2)),
+//   new RedstoneCable(new Position(2, 0, 2)),
+//   new RedstoneCable(new Position(2, 0, 1)),
 
-  new RedstoneCable(new Position(4, 0, 3)),
-  new RedstoneButton(new Position(4, 0, 4)),
-];
+//   new RedstoneCable(new Position(4, 0, 3)),
+//   new RedstoneButton(new Position(4, 0, 4)),
+// ];
 
+// LINE OF CABLES
 // const redstones: RedstoneElement[] = [
 //   new RedstoneButton(new Position(0, 0, 0)),
 //   new RedstoneCable(new Position(1, 0, 0)),
@@ -130,7 +134,17 @@ const redstones: RedstoneElement[] = [
 //   new RedstoneCable(new Position(16, 0, 0)),
 // ];
 
-const world = new Map<string, RedstoneElement>(
+// TORCH TEST
+const redstones: Block[] = [
+  new RedstoneButton(new Position(0, 0, 0)),
+  new RedstoneCable(new Position(1, 0, 0)),
+  new GroundBlock(new Position(2, 0, 0)),
+  new RedstoneTorch(new Position(3, 0, 0), "west"),
+  new RedstoneCable(new Position(4, 0, 0)),
+  new RedstoneCable(new Position(5, 0, 0)),
+];
+
+const world = new Map<string, Block>(
   redstones.map((redstone) => [redstone.position.toStringKey(), redstone]),
 );
 
@@ -246,7 +260,7 @@ function loop(t = 0) {
   }
 
   controls.update();
-  redstones.forEach((r) => r.render());
+  world.forEach((r) => r.render());
   renderer.render(scene, camera);
 
   frameCount++;

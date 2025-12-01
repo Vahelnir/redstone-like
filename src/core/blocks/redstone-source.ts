@@ -23,10 +23,6 @@ export class RedstoneSource extends RedstoneElement {
     return this.outputPower;
   }
 
-  canEmitPower(): boolean {
-    return true;
-  }
-
   getMesh() {
     return this.mesh;
   }

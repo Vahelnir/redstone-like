@@ -45,10 +45,6 @@ export class RedstoneButton extends RedstoneElement {
     return this.outputPower;
   }
 
-  canEmitPower(): boolean {
-    return this.isClicked;
-  }
-
   getMesh() {
     return this.mesh;
   }
